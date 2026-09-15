@@ -1,0 +1,551 @@
+<div
+  class="custom-carousel-container-3"
+  id="custom-carousel-{{ section.id }}"
+>
+  <div class="custom-carousel-3">
+
+    {% for block in section.blocks %}
+      {% if block.settings.image != blank %}
+
+        <a
+          href="{{ block.settings.link | default: '#' }}"
+          class="carousel-slide-3"
+          {{ block.shopify_attributes }}
+        >
+
+          <div class="image-wrapper-3">
+            {{
+              block.settings.image
+              | image_url: width: 800
+              | image_tag:
+                width: block.settings.image.width,
+                height: block.settings.image.height,
+                loading: 'lazy',
+                decoding: 'async',
+                alt: block.settings.image.alt | default: block.settings.title
+            }}
+          </div>
+
+          {% if block.settings.show_button %}
+            <div class="banner-button-wrapper-3">
+              <span class="banner-link-4">
+                {{ block.settings.button_text }}
+              </span>
+            </div>
+          {% endif %}
+
+        </a>
+
+      {% endif %}
+    {% endfor %}
+
+  </div>
+</div>
+
+
+<style>
+
+  /* =========================================
+     MAIN SECTION
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} {
+    width: 100%;
+    box-sizing: border-box;
+    padding: {{ section.settings.section_padding }}px;
+    overflow: hidden;
+  }
+
+
+  /* =========================================
+     CAROUSEL
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .custom-carousel-3 {
+    width: 100%;
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: {{ section.settings.card_gap }}px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    box-sizing: border-box;
+  }
+
+  #custom-carousel-{{ section.id }} .custom-carousel-3::-webkit-scrollbar {
+    display: none;
+  }
+
+
+  /* =========================================
+     CAROUSEL CARD
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .carousel-slide-3 {
+    flex: 0 0 {{ section.settings.desktop_card_width }}px;
+
+    width: {{ section.settings.desktop_card_width }}px;
+
+    background: {{ section.settings.card_background }};
+
+    border-radius: {{ section.settings.border_radius }}px;
+
+    border: none;
+
+    box-shadow: {{ section.settings.card_shadow }};
+
+    overflow: hidden;
+
+    scroll-snap-align: start;
+
+    display: flex;
+    flex-direction: column;
+
+    text-decoration: none;
+    color: inherit;
+
+    transition:
+      box-shadow 0.15s ease-in-out,
+      transform 0.15s ease-in-out;
+
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================
+     CARD HOVER
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .carousel-slide-3:hover {
+    box-shadow: 6px 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+
+  /* =========================================
+     IMAGE
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .image-wrapper-3 {
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    line-height: 0;
+  }
+
+  #custom-carousel-{{ section.id }} .image-wrapper-3 img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    max-width: 100%;
+
+    border-bottom: 1px solid #eee;
+  }
+
+
+  /* =========================================
+     BUTTON WRAPPER
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .banner-button-wrapper-3 {
+    width: 100%;
+
+    padding: 0;
+
+    text-align: left;
+
+    box-sizing: border-box;
+  }
+
+
+  /* =========================================
+     SHOP NOW BUTTON
+  ========================================= */
+
+  #custom-carousel-{{ section.id }} .banner-link-4 {
+    display: inline-block;
+
+    margin: 0;
+
+    padding: 8px 10px;
+
+    background-color: transparent;
+
+    color: {{ section.settings.button_color }};
+
+    border: none;
+
+    text-decoration: underline;
+
+    font-size: {{ section.settings.button_font_size }}px;
+
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    cursor: pointer;
+  }
+
+  #custom-carousel-{{ section.id }} .carousel-slide-3:hover .banner-link-4 {
+    color: {{ section.settings.button_hover_color }};
+  }
+
+
+  /* =========================================
+     TABLET
+  ========================================= */
+
+  @media screen and (max-width: 1024px) {
+
+    #custom-carousel-{{ section.id }} {
+      padding-left: {{ section.settings.section_padding }}px;
+      padding-right: {{ section.settings.section_padding }}px;
+    }
+
+    #custom-carousel-{{ section.id }} .custom-carousel-3 {
+      max-width: 100%;
+
+      justify-content: flex-start;
+
+      overflow-x: auto;
+    }
+
+    #custom-carousel-{{ section.id }} .carousel-slide-3 {
+      flex: 0 0 {{ section.settings.tablet_card_width }}px;
+
+      width: {{ section.settings.tablet_card_width }}px;
+    }
+
+  }
+
+
+  /* =========================================
+     MOBILE
+  ========================================= */
+
+  @media screen and (max-width: 768px) {
+
+    #custom-carousel-{{ section.id }} {
+      padding: {{ section.settings.mobile_section_padding }}px;
+    }
+
+    #custom-carousel-{{ section.id }} .custom-carousel-3 {
+      max-width: 100%;
+
+      justify-content: flex-start;
+
+      gap: {{ section.settings.card_gap }}px;
+    }
+
+    #custom-carousel-{{ section.id }} .carousel-slide-3 {
+      flex: 0 0 {{ section.settings.mobile_card_width }}%;
+
+      width: {{ section.settings.mobile_card_width }}%;
+    }
+
+  }
+
+
+  /* =========================================
+     SMALL MOBILE
+  ========================================= */
+
+  @media screen and (max-width: 480px) {
+
+    #custom-carousel-{{ section.id }} {
+      padding-left: {{ section.settings.mobile_section_padding }}px;
+      padding-right: {{ section.settings.mobile_section_padding }}px;
+    }
+
+    #custom-carousel-{{ section.id }} .carousel-slide-3 {
+      flex: 0 0 {{ section.settings.mobile_card_width }}%;
+
+      width: {{ section.settings.mobile_card_width }}%;
+    }
+
+    #custom-carousel-{{ section.id }} .banner-link-4 {
+      font-size: {{ section.settings.mobile_button_font_size }}px;
+    }
+
+  }
+
+</style>
+
+
+{% schema %}
+
+{
+  "name": "Custom Image Carousel",
+
+  "tag": "section",
+
+  "class": "custom-carousel-section-3",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum carousel width",
+      "min": 800,
+      "max": 1600,
+      "step": 20,
+      "default": 1400,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_card_width",
+      "label": "Desktop card width",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "default": 320,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "tablet_card_width",
+      "label": "Tablet card width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "default": 140,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "label": "Mobile card width",
+      "min": 30,
+      "max": 90,
+      "step": 5,
+      "default": 45,
+      "unit": "%"
+    },
+
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 10,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "section_padding",
+      "label": "Desktop section padding",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "default": 20,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_section_padding",
+      "label": "Mobile section padding",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "default": 10,
+      "unit": "px"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 8,
+      "unit": "px"
+    },
+
+    {
+      "type": "text",
+      "id": "card_shadow",
+      "label": "Card shadow",
+      "default": "0 4px 12px rgba(0,0,0,0.1)"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Button"
+    },
+
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button text color",
+      "default": "#000000"
+    },
+
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Button hover color",
+      "default": "#333333"
+    },
+
+    {
+      "type": "range",
+      "id": "button_font_size",
+      "label": "Button font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_button_font_size",
+      "label": "Mobile button font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 13,
+      "unit": "px"
+    }
+
+  ],
+
+
+  "blocks": [
+
+    {
+      "type": "carousel_item",
+
+      "name": "Carousel item",
+
+      "settings": [
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Image alt text",
+          "default": "Carousel banner"
+        },
+
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+
+        {
+          "type": "checkbox",
+          "id": "show_button",
+          "label": "Show button",
+          "default": true
+        },
+
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now"
+        }
+
+      ]
+    }
+
+  ],
+
+
+  "presets": [
+
+    {
+      "name": "Custom Image Carousel",
+
+      "blocks": [
+
+        {
+          "type": "carousel_item",
+          "settings": {
+            "button_text": "Shop Now"
+          }
+        },
+
+        {
+          "type": "carousel_item",
+          "settings": {
+            "button_text": "Shop Now"
+          }
+        },
+
+        {
+          "type": "carousel_item",
+          "settings": {
+            "button_text": "Shop Now"
+          }
+        },
+
+        {
+          "type": "carousel_item",
+          "settings": {
+            "button_text": "Shop Now"
+          }
+        }
+
+      ]
+    }
+
+  ]
+
+}
+
+{% endschema %}
+

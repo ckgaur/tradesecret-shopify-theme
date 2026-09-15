@@ -1,0 +1,18 @@
+--p-t:{{ settings.padding_block_start | times: 0.1 }}rem;--p-b:{{ settings.padding_block_end | times: 0.1 }}rem;--p-l:{{ settings.padding_inline_start | times: 0.1 }}rem;--p-r:{{ settings.padding_inline_end | times: 0.1 }}rem;--p-t-m:{{ settings.padding_block_start_mobile | times: 0.1 }}rem;--p-b-m:{{ settings.padding_block_end_mobile | times: 0.1 }}rem;--p-l-m:{{ settings.padding_inline_start_mobile | times: 0.1 }}rem;--p-r-m:{{ settings.padding_inline_end_mobile | times: 0.1 }}rem;
+
+{% stylesheet %}
+  body .block-padding {
+    padding-block-start: var(--p-t-m, 0);
+    padding-block-end: var(--p-b-m, 0);
+    padding-inline-start: var(--p-l-m, 0);
+    padding-inline-end: var(--p-r-m, 0);
+  }
+  @media (min-width: 750px) {
+    body .block-padding {
+      padding-block-start: var(--p-t, 0);
+      padding-block-end: var(--p-b, 0);
+      padding-inline-start: var(--p-l, 0);
+      padding-inline-end: var(--p-r, 0);
+    }
+  }
+{% endstylesheet %}
