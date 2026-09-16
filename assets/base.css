@@ -5053,6 +5053,7 @@ shopify-accelerated-checkout-cart {
   width: auto;
   display: inline-block;
   margin: 0 0.25em;
+  min-height: 22px;
 }
 
 .announcement-primary-text,
