@@ -6418,6 +6418,18 @@ p.product__text.inline-richtext.mb-2_4.mb-lg-2_4 {
   width: 100% !important;
 }
 
+/* Before Swiper's JS initializes, show only the first slide so the
+   announcement bar renders at its final (one-slide) height from the
+   start instead of collapsing from a stacked, all-slides-visible state
+   once Swiper.js runs — that collapse was causing a large layout shift. */
+.announcement-bar .swiper:not(.swiper-initialized) .swiper-wrapper {
+  display: block;
+  overflow: hidden;
+}
+.announcement-bar .swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
+  display: none;
+}
+
 @media(min-width:1800px){
 .sale-card .title{
   font-size: 35px;

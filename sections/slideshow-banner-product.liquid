@@ -317,15 +317,8 @@
   <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-<script
-  data-lazy-src="{{ 'slideshow.js' | asset_url }}"
-  data-lazy-deps="{{ 'swiper-bundle.min.js' | asset_url }}"
-  data-lazy-css="{{ 'swiper-bundle.min.css' | asset_url }}"
-></script>
-<script
-  data-lazy-src="{{ 'slideshow-banner-product-slider.js' | asset_url }}"
-  data-lazy-deps="{{ 'swiper-bundle.min.js' | asset_url }}"
-></script>
+<script data-lazy-src="{{ 'slideshow.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'slideshow-banner-product-slider.js' | asset_url }}"></script>
 
 {% schema %}
 {

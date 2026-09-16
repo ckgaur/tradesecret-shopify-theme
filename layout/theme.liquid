@@ -70,10 +70,11 @@
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    {%- comment -%} The announcement bar (header-group, above-the-fold on every page) uses Swiper directly, so the core library must stay eager site-wide. {%- endcomment -%}
+    <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
     {%- if template.name == 'product' -%}
-      {%- comment -%} Product page's media gallery/slider is above-the-fold and needs Swiper immediately. {%- endcomment -%}
-      <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-      <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+      {%- comment -%} Product page's media gallery/slider is above-the-fold and needs the swiper-slider custom element immediately. {%- endcomment -%}
       <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
     {%- if settings.animations_reveal_on_scroll -%}
