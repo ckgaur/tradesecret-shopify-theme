@@ -1,1 +1,81 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","blocks":{"text_xmTwjj":{"type":"text","settings":{"heading":"STORE INFORMATION","subtext":"<p>TradeSecrets.ca<\/p><p>101 Jevlan Dr <br\/>Woodbridge, ON, Canada<\/p><p>Hours: Mon-Fri: 8:30am - 3:00pm<\/p><p>Email us : info@tradesecrets.ca<\/p><p>905-264-2799<\/p>"}},"footer-1":{"type":"link_list","settings":{"heading":"OUR COMPANY","menu":"our-company"}},"link_list_4cQ6dV":{"type":"link_list","settings":{"heading":"PRODUCTS","menu":"products"}},"link_list_kii9bq":{"type":"link_list","settings":{"heading":"YOUR ACCOUNT","menu":"your-account"}}},"block_order":["text_xmTwjj","footer-1","link_list_4cQ6dV","link_list_kii9bq"],"custom_css":[],"settings":{"color_scheme":"scheme-5","menu_layout":"accordion","heading_weight":"fw-500","newsletter_enable":true,"newsletter_heading":"SIGN UP","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":false,"enable_language_selector":true,"payment_enable":true,"margin_top":0,"image_full_width":false,"image_height":"adapt-image","image_position_mb":"top","show_policy":false,"copyright_color_scheme":"scheme-6","padding_top":80,"padding_bottom":40,"padding_top_mb":40,"padding_bottom_mb":36}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "text_xmTwjj": {
+          "type": "text",
+          "settings": {
+            "heading": "STORE INFORMATION",
+            "subtext": "<p>TradeSecrets.ca</p><p>101 Jevlan Dr <br/>Woodbridge, ON, Canada</p><p>Hours: Mon-Fri: 8:30am - 3:00pm</p><p>Email us : info@tradesecrets.ca</p><p>905-264-2799</p>"
+          }
+        },
+        "footer-1": {
+          "type": "link_list",
+          "settings": {
+            "heading": "OUR COMPANY",
+            "menu": "our-company"
+          }
+        },
+        "link_list_4cQ6dV": {
+          "type": "link_list",
+          "settings": {
+            "heading": "PRODUCTS",
+            "menu": "products"
+          }
+        },
+        "link_list_kii9bq": {
+          "type": "link_list",
+          "settings": {
+            "heading": "YOUR ACCOUNT",
+            "menu": "your-account"
+          }
+        }
+      },
+      "block_order": [
+        "text_xmTwjj",
+        "footer-1",
+        "link_list_4cQ6dV",
+        "link_list_kii9bq"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "menu_layout": "accordion",
+        "heading_weight": "fw-500",
+        "newsletter_enable": true,
+        "newsletter_heading": "SIGN UP",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "margin_top": 0,
+        "image_full_width": false,
+        "image_height": "adapt-image",
+        "image_position_mb": "top",
+        "show_policy": false,
+        "copyright_color_scheme": "scheme-6",
+        "padding_top": 80,
+        "padding_bottom": 40,
+        "padding_top_mb": 40,
+        "padding_bottom_mb": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
