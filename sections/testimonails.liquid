@@ -1,5 +1,9 @@
-{{ 'section-testimonials.css' | asset_url | stylesheet_tag: preload: true }}
-{{ 'swiper.css' | asset_url | stylesheet_tag: preload: true }}
+<link rel="stylesheet" href="{{ 'section-testimonials.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'swiper.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>
+  {{ 'section-testimonials.css' | asset_url | stylesheet_tag }}
+  {{ 'swiper.css' | asset_url | stylesheet_tag }}
+</noscript>
 
 
 {%- style -%}

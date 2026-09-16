@@ -1,5 +1,9 @@
-{{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
-{{ 'section-multiple-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
+<link rel="stylesheet" href="{{ 'section-scrolling-banner.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-multiple-scrolling-banner.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>
+  {{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag }}
+  {{ 'section-multiple-scrolling-banner.css' | asset_url | stylesheet_tag }}
+</noscript>
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
