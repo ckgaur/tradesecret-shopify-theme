@@ -53,8 +53,38 @@
     <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+
+    <script>
+      // Loads a script once the customer interacts OR the page finishes loading OR a timeout is hit — whichever comes first.
+      window.__lazyLoadScript = function (src) {
+        var loaded = false;
+        var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
+
+        function load() {
+          if (loaded) return;
+          loaded = true;
+          var s = document.createElement('script');
+          s.src = src;
+          s.defer = true;
+          document.head.appendChild(s);
+
+          events.forEach(function (evt) {
+            window.removeEventListener(evt, load, { passive: true });
+          });
+          window.removeEventListener('load', load);
+          clearTimeout(fallback);
+        }
+
+        events.forEach(function (evt) {
+          window.addEventListener(evt, load, { passive: true, once: true });
+        });
+        window.addEventListener('load', load, { once: true });
+        var fallback = setTimeout(load, 8000);
+      };
+    </script>
+
     {%- if settings.animations_reveal_on_scroll -%}
-      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+      <script>window.__lazyLoadScript('{{ "animations.js" | asset_url }}');</script>
     {%- endif -%}
 
     {{ content_for_header }}
@@ -459,7 +489,7 @@
 
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
       {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
-      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
+      <script>window.__lazyLoadScript('{{ "localization-form.js" | asset_url }}');</script>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
@@ -683,7 +713,7 @@ display:block !important;
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+      <script>window.__lazyLoadScript('{{ "predictive-search.js" | asset_url }}');</script>
     {%- endif -%}
 
 		{%- if settings.cart_type == 'drawer' -%}
