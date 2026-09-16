@@ -625,11 +625,6 @@ display:block !important;
       <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
     </ul>
 
-	<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M27MMJCW"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
     <script>
       window.shopUrl = '{{ request.origin }}';
       window.forms = {
@@ -696,9 +691,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {%- endif -%}
 
 	<script>
-  (function e() {
+(function() {
+  var loaded = false;
+  function loadButterly() {
+    if (loaded) return;
+    loaded = true;
     var today = new Date();
-    var stamp = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours();
+    var stamp = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     var e = document.createElement('script');
     e.type = 'text/javascript';
     e.async = true;
@@ -706,7 +705,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     e.src = 'https://butterly.com/richmedia/socialfeed/socialEmbed.js?stamp=' + stamp;
     var t = document.getElementsByTagName('script')[0];
     t.parentNode.insertBefore(e, t);
-  })();
+
+    events.forEach(function(evt) {
+      window.removeEventListener(evt, loadButterly, { passive: true });
+    });
+    clearTimeout(fallback);
+  }
+
+  var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
+  events.forEach(function(evt) {
+    window.addEventListener(evt, loadButterly, { passive: true, once: true });
+  });
+
+  var fallback = setTimeout(loadButterly, 5000);
+})();
 </script>
 
 
@@ -920,7 +932,12 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+  rel="stylesheet"
+  media="print"
+  onload="this.media='all'"
+>
 <style>
   #us-redirect-popup, #us-redirect-popup * {
     box-sizing: border-box !important;
@@ -1095,7 +1112,11 @@ document.addEventListener("DOMContentLoaded", function() {
       setDismissed();
     });
 
-    init();
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, { timeout: 3000 });
+    } else {
+      setTimeout(init, 1500);
+    }
   });
 })();
 </script>
