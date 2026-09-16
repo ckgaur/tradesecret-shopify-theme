@@ -120,12 +120,12 @@
   }
 {%- endstyle -%}
 
-<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+<script data-lazy-src="{{ 'details-disclosure.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'details-modal.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'cart-notification.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'search-form.js' | asset_url }}"></script>
 {%- if settings.cart_type == "drawer" -%}
-  <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'cart-drawer.js' | asset_url }}"></script>
 {%- endif -%}
 
 <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
@@ -726,7 +726,7 @@
   {%- render 'cart-notification', color_scheme: settings.cart_color_scheme, desktop_menu_type: section.settings.menu_type_desktop -%}
 {%- endif -%}
 
-<script src="{{ 'header.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'header.js' | asset_url }}"></script>
 
 <script type="application/ld+json">
   {

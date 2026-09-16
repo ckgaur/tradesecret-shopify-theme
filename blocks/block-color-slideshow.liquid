@@ -72,8 +72,8 @@
   
   </block-slideshow>
 
-  <script src="{{ 'block-slideshow.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'block-color-slideshow.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'block-slideshow.js' | asset_url }}"></script>
+  <script data-lazy-src="{{ 'block-color-slideshow.js' | asset_url }}"></script>
 </div>
 
 <div class="color-navigation" data-color-navigation-for="shopify-section-{{ section.id }}-row-{{ block.id }}">

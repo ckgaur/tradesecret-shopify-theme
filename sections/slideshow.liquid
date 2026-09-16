@@ -231,7 +231,7 @@
 </div>
 
 {%- if request.design_mode -%}
-  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'theme-editor.js' | asset_url }}"></script>
 {%- endif -%}
 
 <script data-lazy-src="{{ 'slideshow.js' | asset_url }}"></script>

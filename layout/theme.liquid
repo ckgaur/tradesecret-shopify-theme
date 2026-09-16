@@ -64,21 +64,19 @@
 					} catch (e) {}
 				})();
 			</script>
-			<script src="{{ 'color-scheme-toggle.js' | asset_url }}" defer="defer"></script>
+			<script data-lazy-src="{{ 'color-scheme-toggle.js' | asset_url }}"></script>
     {% endif %}
 
-    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    {%- comment -%} The announcement bar (header-group, above-the-fold on every page) uses Swiper directly, so the core library must stay eager site-wide. {%- endcomment -%}
+    <script data-lazy-src="{{ 'constants.js' | asset_url }}"></script>
+    <script data-lazy-src="{{ 'pubsub.js' | asset_url }}"></script>
+    <script data-lazy-src="{{ 'global.js' | asset_url }}"></script>
     <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+    <script data-lazy-src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
     {%- if template.name == 'product' -%}
-      {%- comment -%} Product page's media gallery/slider is above-the-fold and needs the swiper-slider custom element immediately. {%- endcomment -%}
-      <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'swiper-slider.js' | asset_url }}" data-lazy-deps="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
     {%- endif -%}
     {%- if settings.animations_reveal_on_scroll -%}
-      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'animations.js' | asset_url }}"></script>
     {%- endif -%}
 
     {{ content_for_header }}
@@ -484,7 +482,7 @@
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
       <link rel="stylesheet" href="{{ 'component-localization-form.css' | asset_url }}" media="print" onload="this.media='all'">
       <noscript>{{ 'component-localization-form.css' | asset_url | stylesheet_tag }}</noscript>
-      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'localization-form.js' | asset_url }}"></script>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
@@ -713,7 +711,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'predictive-search.js' | asset_url }}"></script>
     {%- endif -%}
 
 		{%- if settings.cart_type == 'drawer' -%}

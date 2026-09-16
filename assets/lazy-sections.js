@@ -1,18 +1,22 @@
 /**
- * Section-level lazy loader.
- * Section files mark their below-the-fold JS with:
+ * Global deferred-script loader.
+ *
+ * Every theme script is marked up as:
  *   <script data-lazy-src="{{ 'foo.js' | asset_url }}" data-lazy-module="true"></script>
- * instead of a normal <script src>. This controller watches the enclosing
- * .shopify-section wrapper with a single shared IntersectionObserver and
- * injects the real <script> tag only once the section approaches the viewport.
+ * instead of a normal <script src>, so nothing downloads or executes on
+ * initial page load. The very first user interaction (scroll, touch, key
+ * press, mouse move/click) — or a timeout fallback for users who never
+ * interact — injects every deferred <script> in document order.
+ *
+ * In the theme editor (Shopify.designMode) scripts load immediately so
+ * merchants get a working preview without needing to interact first.
  */
 (function () {
   'use strict';
 
   var scriptPromises = new Map();
   var loadedStyles = new Set();
-  var observedSections = new Set();
-  var observer;
+  var triggered = false;
 
   function loadStyle(href) {
     href = href && href.trim();
@@ -68,57 +72,46 @@
     });
   }
 
-  function loadSection(section) {
-    var markers = section.querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
+  function scan(root) {
+    var markers = (root || document).querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
     markers.forEach(loadMarker);
   }
 
-  function getSection(marker) {
-    return marker.closest('.shopify-section') || marker.parentElement || document.body;
+  var INTERACTION_EVENTS = ['scroll', 'wheel', 'touchstart', 'keydown', 'mousedown', 'mousemove'];
+  var FALLBACK_DELAY = 5000;
+  var fallbackTimer;
+
+  function triggerAll() {
+    if (triggered) return;
+    triggered = true;
+
+    clearTimeout(fallbackTimer);
+    INTERACTION_EVENTS.forEach(function (evt) {
+      window.removeEventListener(evt, triggerAll, { passive: true });
+      document.removeEventListener(evt, triggerAll, { passive: true });
+    });
+
+    scan(document);
   }
 
-  function observeSection(section) {
-    if (!section || observedSections.has(section)) return;
-    observedSections.add(section);
-    observer.observe(section);
-  }
-
-  function scan(root) {
-    var markers = (root || document).querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
-    if (!markers.length) return;
-
-    if (!('IntersectionObserver' in window)) {
-      markers.forEach(function (marker) {
-        loadSection(getSection(marker));
-      });
+  function init() {
+    if (window.Shopify && window.Shopify.designMode) {
+      triggerAll();
       return;
     }
 
-    markers.forEach(function (marker) {
-      observeSection(getSection(marker));
+    INTERACTION_EVENTS.forEach(function (evt) {
+      window.addEventListener(evt, triggerAll, { passive: true, once: true });
+      document.addEventListener(evt, triggerAll, { passive: true, once: true });
     });
+    fallbackTimer = setTimeout(triggerAll, FALLBACK_DELAY);
   }
 
-  if ('IntersectionObserver' in window) {
-    observer = new IntersectionObserver(
-      function (entries, obs) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            loadSection(entry.target);
-            obs.unobserve(entry.target);
-            observedSections.delete(entry.target);
-          }
-        });
-      },
-      { rootMargin: '600px 0px', threshold: 0 }
-    );
-  }
+  init();
 
-  scan(document);
-
-  // Re-scan when the theme editor swaps a section's markup so lazy sections
-  // still initialize while merchants are editing.
+  // Re-scan when the theme editor swaps a section's markup so newly added
+  // scripts still load (immediately, since designMode already triggered).
   document.addEventListener('shopify:section:load', function (event) {
-    scan(event.target);
+    if (triggered) scan(event.target);
   });
 })();

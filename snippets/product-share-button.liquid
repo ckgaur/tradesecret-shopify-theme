@@ -12,7 +12,7 @@
 	%}
 {% endcomment %}
 
-<script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
+<script data-lazy-src="{{ 'share.js' | asset_url }}"></script>
 
 <share-button
   id="Share-{{ section.id }}"

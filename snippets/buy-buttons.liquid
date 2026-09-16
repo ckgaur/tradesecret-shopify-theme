@@ -82,7 +82,7 @@
               </template>
             </pickup-availability>
 
-            <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+            <script data-lazy-src="{{ 'pickup-availability.js' | asset_url }}"></script>
           {%- endif -%}
         </div>
       {%- endif -%}
@@ -204,7 +204,7 @@
         </template>
       </pickup-availability>
 
-      <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'pickup-availability.js' | asset_url }}"></script>
     {%- endif -%}
   {%- endif -%}
 </div>

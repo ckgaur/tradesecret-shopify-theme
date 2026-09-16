@@ -16,8 +16,8 @@
 
 {%- if section.settings.enable_quick_add -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
 {%- endif -%}
 
 {% assign subcollections = section.blocks | where: "type", "subcollections" | first %}
@@ -348,7 +348,7 @@
     <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width js-active{% elsif section.settings.filter_type == 'horizontal' -%} facets-horizontal{% else %}facets-drawer{% endif %}">
 
       {{ 'component-facets.css' | asset_url | stylesheet_tag }}
-      <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+      <script data-lazy-src="{{ 'facets.js' | asset_url }}"></script>
 
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside aria-labelledby="verticalTitle" class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %} {% if section.settings.filter_type != 'horizontal' %}{{ section.settings.heading_font_family }}{% endif %}" id="main-collection-filters" data-id="{{ section.id }}">
@@ -544,7 +544,7 @@
 
 </div>
 
-<script src="{{ 'product-model.js' | asset_url }}" defer></script>
+<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
 
 {% schema %}
 {

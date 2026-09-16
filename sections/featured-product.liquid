@@ -13,9 +13,9 @@
 	<link rel="stylesheet" href="{{ 'component-swatch-input.css' | asset_url }}" media="print" onload="this.media='all'">
 {% endunless %}
 
-<script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
+<script data-lazy-src="{{ 'product-info.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'show-more.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'price-per-item.js' | asset_url }}"></script>
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -811,18 +811,18 @@
   </div>
 </section>
 
-<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
 {%- if section.settings.image_zoom == 'hover' -%}
-  <script id="EnableZoomOnHover-featured" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
+  <script id="EnableZoomOnHover-featured" data-lazy-src="{{ 'magnify.js' | asset_url }}"></script>
 {%- endif %}
 {%- if request.design_mode -%}
-  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'theme-editor.js' | asset_url }}"></script>
 {%- endif -%}
 
-<script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+<script data-lazy-src="{{ 'product-modal.js' | asset_url }}"></script>
+<script data-lazy-src="{{ 'media-gallery.js' | asset_url }}"></script>
 
-<script src="{{ 'product-model.js' | asset_url }}" defer></script>
+<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
 {%- if first_3d_model -%}
   <script type="application/json" id="ProductJSON-{{ product.id }}">
     {{ product.media | where: 'media_type', 'model' | json }}
