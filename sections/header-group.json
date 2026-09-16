@@ -56,7 +56,6 @@
     },
     "header": {
       "type": "header",
-      "disabled": true,
       "custom_css": [
         "nav.header__inline-menu {/*background: #cc2d30;*/ background: black;}",
         ".st-wishlist-button {display: none;}",
