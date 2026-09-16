@@ -67,6 +67,7 @@
         "slide_mLjYHK",
         "slide_4tVLUB"
       ],
+      "disabled": true,
       "name": "Custom Banner Carousel",
       "settings": {}
     },
@@ -84,6 +85,7 @@
       "block_order": [
         "heading_3q4mPe"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -154,11 +156,13 @@
         "slide_rzqYAQ",
         "slide_PjWm6T"
       ],
+      "disabled": true,
       "name": "Category Carousel",
       "settings": {}
     },
     "featured_collection_LNhMTN": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".card__inner {border: 0px solid #eaeaea;}"
       ],
@@ -249,6 +253,7 @@
         "carousel_item_gnTzA6",
         "carousel_item_Vf6MFQ"
       ],
+      "disabled": true,
       "name": "Custom Image Carousel",
       "settings": {
         "max_width": 1400,
@@ -357,6 +362,7 @@
         "column_3qiQdG",
         "column_6kMBJp"
       ],
+      "disabled": true,
       "custom_css": [
         "img {border-radius: 200px;}",
         "h2 {font-size: 32px;}",
@@ -483,6 +489,7 @@
         "carousel_item_kt6Yba",
         "carousel_item_pgGqkp"
       ],
+      "disabled": true,
       "name": "Custom Brand Carousel",
       "settings": {
         "heading": "",
@@ -493,6 +500,7 @@
     },
     "featured_collection_yJnwNX": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".card__inner {border: 0px solid #eaeaea;}"
       ],
@@ -604,6 +612,7 @@
         "brand_mpBi3K",
         "brand_7D4y4p"
       ],
+      "disabled": true,
       "custom_css": [
         ".cta-brand-section {margin-bottom: 0px; padding-bottom: 0px;}"
       ],
