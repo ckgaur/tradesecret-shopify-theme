@@ -1070,6 +1070,95 @@ document.addEventListener("DOMContentLoaded", function() {
   src="{{ 'lazy-sections.js' | asset_url }}"
   defer>
 </script>
+<script>
+(function () {
+  'use strict';
+
+  const main = document.querySelector('#MainContent');
+
+  if (!main) return;
+
+  const sections = Array.from(
+    main.querySelectorAll(':scope > section.shopify-section')
+  );
+
+  const INITIAL_SECTIONS = 3;
+
+  sections.forEach((section, index) => {
+
+    // First 3 sections load normally
+    if (index < INITIAL_SECTIONS) {
+      return;
+    }
+
+    // Sections after first 3
+    section.classList.add('lazy-section');
+
+    // Browser-level optimization
+    section.style.contentVisibility = 'auto';
+    section.style.containIntrinsicSize = '800px';
+
+    // Lazy load images
+    section.querySelectorAll('img').forEach(img => {
+      img.loading = 'lazy';
+      img.decoding = 'async';
+    });
+
+    // Lazy load iframes
+    section.querySelectorAll('iframe').forEach(iframe => {
+      iframe.loading = 'lazy';
+    });
+  });
+
+
+  /*
+   * Initialize section when user gets close to it.
+   */
+  const observer = new IntersectionObserver(
+    function (entries, observer) {
+
+      entries.forEach(function (entry) {
+
+        if (!entry.isIntersecting) return;
+
+        const section = entry.target;
+
+        section.classList.add('lazy-section-loaded');
+
+        /*
+         * Notify custom section scripts.
+         */
+        section.dispatchEvent(
+          new CustomEvent('shopify:section:visible', {
+            bubbles: true,
+            detail: {
+              sectionId: section.id
+            }
+          })
+        );
+
+        observer.unobserve(section);
+      });
+
+    },
+    {
+      rootMargin: '600px 0px',
+      threshold: 0
+    }
+  );
+
+
+  sections.forEach(function (section, index) {
+
+    if (index >= INITIAL_SECTIONS) {
+      observer.observe(section);
+    }
+
+  });
+
+})();
+</script>
+
 
   </body>
 </html>

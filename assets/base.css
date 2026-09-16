@@ -6708,3 +6708,8 @@ span.st-label.st-js-label {
     padding-right: 300px;
 }
 }
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
