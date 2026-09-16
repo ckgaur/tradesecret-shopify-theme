@@ -9,6 +9,13 @@
         {% if block.settings.image != blank %}
           <img
             src="{{ block.settings.image | image_url: width: 700 }}"
+            srcset="
+              {{ block.settings.image | image_url: width: 400 }} 400w,
+              {{ block.settings.image | image_url: width: 600 }} 600w,
+              {{ block.settings.image | image_url: width: 800 }} 800w,
+              {{ block.settings.image | image_url: width: 1000 }} 1000w
+            "
+            sizes="(max-width: 480px) 75vw, (max-width: 1024px) 50vw, 28vw"
             width="{{ block.settings.image.width }}"
             height="{{ block.settings.image.height }}"
             alt="{{ block.settings.image.alt | escape | default: block.settings.heading | escape }}"
