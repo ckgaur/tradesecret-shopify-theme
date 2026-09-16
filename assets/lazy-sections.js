@@ -9,29 +9,68 @@
 (function () {
   'use strict';
 
-  var loadedSrc = new Set();
+  var scriptPromises = new Map();
+  var loadedStyles = new Set();
   var observedSections = new Set();
   var observer;
 
+  function loadStyle(href) {
+    href = href && href.trim();
+    if (!href || loadedStyles.has(href)) return;
+    loadedStyles.add(href);
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
   function loadScript(src, isModule) {
-    if (!src || loadedSrc.has(src)) return;
-    loadedSrc.add(src);
-    var script = document.createElement('script');
-    script.src = src;
-    if (isModule) {
-      script.type = 'module';
-    } else {
-      script.defer = true;
+    if (!src) return Promise.resolve();
+    if (scriptPromises.has(src)) return scriptPromises.get(src);
+    var promise = new Promise(function (resolve) {
+      var script = document.createElement('script');
+      script.src = src;
+      if (isModule) {
+        script.type = 'module';
+      }
+      script.onload = resolve;
+      script.onerror = resolve;
+      document.body.appendChild(script);
+    });
+    scriptPromises.set(src, promise);
+    return promise;
+  }
+
+  function loadDeps(depsAttr) {
+    var urls = (depsAttr || '')
+      .split(',')
+      .map(function (s) { return s.trim(); })
+      .filter(Boolean);
+    return urls.reduce(function (chain, url) {
+      return chain.then(function () { return loadScript(url, false); });
+    }, Promise.resolve());
+  }
+
+  function loadMarker(marker) {
+    if (marker.hasAttribute('data-lazy-loaded')) return;
+    marker.setAttribute('data-lazy-loaded', 'true');
+
+    var cssAttr = marker.getAttribute('data-lazy-css');
+    if (cssAttr) {
+      cssAttr.split(',').forEach(function (href) { loadStyle(href); });
     }
-    document.body.appendChild(script);
+
+    var src = marker.getAttribute('data-lazy-src');
+    var isModule = marker.getAttribute('data-lazy-module') === 'true';
+
+    loadDeps(marker.getAttribute('data-lazy-deps')).then(function () {
+      loadScript(src, isModule);
+    });
   }
 
   function loadSection(section) {
-    var markers = section.querySelectorAll('script[data-lazy-src]');
-    markers.forEach(function (marker) {
-      loadScript(marker.getAttribute('data-lazy-src'), marker.getAttribute('data-lazy-module') === 'true');
-      marker.setAttribute('data-lazy-loaded', 'true');
-    });
+    var markers = section.querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
+    markers.forEach(loadMarker);
   }
 
   function getSection(marker) {

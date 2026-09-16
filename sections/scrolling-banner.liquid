@@ -99,8 +99,11 @@
 	</marquee-text>
 </div>
 
-<script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
-<script data-lazy-src="{{ 'scrolling-banner.js' | asset_url }}" data-lazy-module="true"></script>
+<script
+  data-lazy-src="{{ 'scrolling-banner.js' | asset_url }}"
+  data-lazy-module="true"
+  data-lazy-deps="{{ 'gsap.min.js' | asset_url }}"
+></script>
 
 {% schema %}
 {

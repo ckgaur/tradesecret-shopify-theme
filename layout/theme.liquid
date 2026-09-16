@@ -69,12 +69,13 @@
 
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
-    <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'custom-banner-carousel.js' | asset_url }}" defer="defer"></script>
+    {%- if template.name == 'product' -%}
+      {%- comment -%} Product page's media gallery/slider is above-the-fold and needs Swiper immediately. {%- endcomment -%}
+      <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
