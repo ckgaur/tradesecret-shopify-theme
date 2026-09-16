@@ -1,22 +1,26 @@
 /**
- * Global deferred-script loader.
+ * Viewport-based progressive section loader.
  *
  * Every theme script is marked up as:
  *   <script data-lazy-src="{{ 'foo.js' | asset_url }}" data-lazy-module="true"></script>
- * instead of a normal <script src>, so nothing downloads or executes on
- * initial page load. The very first user interaction (scroll, touch, key
- * press, mouse move/click) — or a timeout fallback for users who never
- * interact — injects every deferred <script> in document order.
+ * instead of a normal <script src>, so nothing downloads or executes until
+ * needed. A single shared IntersectionObserver watches each marker's
+ * enclosing .shopify-section wrapper and injects that section's real
+ * <script> tags only once the section approaches the viewport — sections
+ * already on screen at load time load immediately, below-the-fold sections
+ * load one by one as the user scrolls toward them.
  *
  * In the theme editor (Shopify.designMode) scripts load immediately so
- * merchants get a working preview without needing to interact first.
+ * merchants get a working preview without needing to scroll first.
  */
 (function () {
   'use strict';
 
   var scriptPromises = new Map();
   var loadedStyles = new Set();
-  var triggered = false;
+  var observedSections = new Set();
+  var observer;
+  var designMode = !!(window.Shopify && window.Shopify.designMode);
 
   function loadStyle(href) {
     href = href && href.trim();
@@ -72,46 +76,59 @@
     });
   }
 
-  function scan(root) {
-    var markers = (root || document).querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
+  function loadSection(section) {
+    var markers = section.querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
     markers.forEach(loadMarker);
   }
 
-  var INTERACTION_EVENTS = ['scroll', 'wheel', 'touchstart', 'keydown', 'mousedown', 'mousemove'];
-  var FALLBACK_DELAY = 5000;
-  var fallbackTimer;
-
-  function triggerAll() {
-    if (triggered) return;
-    triggered = true;
-
-    clearTimeout(fallbackTimer);
-    INTERACTION_EVENTS.forEach(function (evt) {
-      window.removeEventListener(evt, triggerAll, { passive: true });
-      document.removeEventListener(evt, triggerAll, { passive: true });
-    });
-
-    scan(document);
+  function observeSection(section) {
+    if (observedSections.has(section)) return;
+    observedSections.add(section);
+    observer.observe(section);
   }
 
-  function init() {
-    if (window.Shopify && window.Shopify.designMode) {
-      triggerAll();
-      return;
-    }
+  function scan(root) {
+    var markers = (root || document).querySelectorAll('script[data-lazy-src]:not([data-lazy-loaded])');
+    if (!markers.length) return;
 
-    INTERACTION_EVENTS.forEach(function (evt) {
-      window.addEventListener(evt, triggerAll, { passive: true, once: true });
-      document.addEventListener(evt, triggerAll, { passive: true, once: true });
+    markers.forEach(function (marker) {
+      var section = marker.closest('.shopify-section');
+
+      // Markers outside a section wrapper (head/body-level scripts like
+      // global.js, pubsub.js, predictive-search.js) are core infrastructure
+      // used by every section, so they load immediately rather than waiting
+      // on a viewport that doesn't exist for an unrendered <head> element.
+      if (!section || designMode || !('IntersectionObserver' in window)) {
+        loadMarker(marker);
+        return;
+      }
+
+      observeSection(section);
     });
-    fallbackTimer = setTimeout(triggerAll, FALLBACK_DELAY);
   }
 
-  init();
+  if (!designMode && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver(
+      function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            loadSection(entry.target);
+            obs.unobserve(entry.target);
+            observedSections.delete(entry.target);
+          }
+        });
+      },
+      // Load a section's JS a little before it reaches the viewport so it's
+      // ready to interact with the moment it scrolls into view.
+      { rootMargin: '400px 0px', threshold: 0 }
+    );
+  }
 
-  // Re-scan when the theme editor swaps a section's markup so newly added
-  // scripts still load (immediately, since designMode already triggered).
+  scan(document);
+
+  // Re-scan when the theme editor swaps a section's markup so lazy sections
+  // still initialize while merchants are editing.
   document.addEventListener('shopify:section:load', function (event) {
-    if (triggered) scan(event.target);
+    scan(event.target);
   });
 })();
