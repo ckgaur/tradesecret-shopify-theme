@@ -163,8 +163,8 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
 
 @media screen and (min-width: 990px) {
   .header:not(.drawer-menu).page-width {
-    padding-left: 5rem;
-    padding-right: 5rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
   }
 
   .page-width--narrow {
@@ -5314,8 +5314,8 @@ margin: auto;
 
 @media(min-width:1200px){
 .header--inline-search .header--top-left {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
+  /* padding-left: 0px !important;
+  padding-right: 0px !important; */
   display: block;
 }
 .product-card-wrapper .card__heading a{
