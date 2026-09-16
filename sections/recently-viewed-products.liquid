@@ -25,8 +25,8 @@
 
 
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
 
 
 <div class="color-{{ section.settings.color_scheme }} gradient no-js-hidden section-responsive-padding recently-viewed-products-wrapper">
@@ -77,7 +77,7 @@
   </recently-viewed-products>
 </div>
 
-<script src="{{ 'recently-viewed-products.js' | asset_url }}" type="module" defer="defer"></script>
+<script data-lazy-src="{{ 'recently-viewed-products.js' | asset_url }}" data-lazy-module="true"></script>
 
 {% schema %}
 {

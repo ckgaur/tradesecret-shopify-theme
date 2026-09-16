@@ -18,8 +18,8 @@
 
 {%- if section.settings.enable_quick_add -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
 {%- endif -%}
 
 {%- liquid
@@ -279,7 +279,7 @@
   </div>
 </featured-collection>
 
-<script src="{{ 'featured-collection.js' | asset_url }}" type="module" defer="defer"></script>
+<script data-lazy-src="{{ 'featured-collection.js' | asset_url }}" data-lazy-module="true"></script>
 <script src="{{ 'product-model.js' | asset_url }}" defer></script>
 
 {% schema %}

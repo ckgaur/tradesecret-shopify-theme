@@ -100,7 +100,7 @@
 </div>
 
 <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'scrolling-banner.js' | asset_url }}" type="module" defer="defer"></script>
+<script data-lazy-src="{{ 'scrolling-banner.js' | asset_url }}" data-lazy-module="true"></script>
 
 {% schema %}
 {
