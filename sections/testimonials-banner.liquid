@@ -1,9 +1,5 @@
-<link rel="stylesheet" href="{{ 'section-testimonials-banner.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'swiper.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>
-  {{ 'section-testimonials-banner.css' | asset_url | stylesheet_tag }}
-  {{ 'swiper.css' | asset_url | stylesheet_tag }}
-</noscript>
+{{ 'section-testimonials-banner.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'swiper.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -289,7 +285,7 @@
   </div>
 </div>
 
-<script data-lazy-src="{{ 'testimonials-banner.js' | asset_url }}" data-lazy-module="true"></script>
+<script src="{{ 'testimonials-banner.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

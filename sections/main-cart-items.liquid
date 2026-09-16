@@ -39,10 +39,10 @@
 {%- endstyle -%}
 
 {%- unless settings.cart_type == 'drawer' -%}
-  <script data-lazy-src="{{ 'cart.js' | asset_url }}"></script>
+  <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 {%- endunless -%}
 
-<script data-lazy-src="{{ 'quantity-popover.js' | asset_url }}"></script>
+<script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
 {%- if section.settings.show_breadcrumbs -%}
   <div class="breadcrumbs-wrapper color-{{ section.settings.breadcrumbs_color_scheme }}">

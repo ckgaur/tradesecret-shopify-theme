@@ -163,8 +163,8 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
 
 @media screen and (min-width: 990px) {
   .header:not(.drawer-menu).page-width {
-    padding-left: 0rem;
-    padding-right: 0rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
   }
 
   .page-width--narrow {
@@ -5314,8 +5314,8 @@ margin: auto;
 
 @media(min-width:1200px){
 .header--inline-search .header--top-left {
-  /* padding-left: 0px !important;
-  padding-right: 0px !important; */
+  padding-left: 0px !important;
+  padding-right: 0px !important;
   display: block;
 }
 .product-card-wrapper .card__heading a{
@@ -6416,18 +6416,6 @@ p.product__text.inline-richtext.mb-2_4.mb-lg-2_4 {
 }
 .announcement-bar .swiper-slide{
   width: 100% !important;
-}
-
-/* Before Swiper's JS initializes, show only the first slide so the
-   announcement bar renders at its final (one-slide) height from the
-   start instead of collapsing from a stacked, all-slides-visible state
-   once Swiper.js runs — that collapse was causing a large layout shift. */
-.announcement-bar .swiper:not(.swiper-initialized) .swiper-wrapper {
-  display: block;
-  overflow: hidden;
-}
-.announcement-bar .swiper:not(.swiper-initialized) .swiper-slide:not(:first-child) {
-  display: none;
 }
 
 @media(min-width:1800px){

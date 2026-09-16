@@ -483,7 +483,7 @@
 </footer>
 
 {%- if section.settings.menu_layout == 'accordion' -%}
-	<script data-lazy-src="{{ 'footer.js' | asset_url }}" data-lazy-module="true"></script>
+	<script src="{{ 'footer.js' | asset_url }}" type="module" defer="defer"></script>
 {%- endif -%}
 
 {% schema %}

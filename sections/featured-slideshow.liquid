@@ -1,7 +1,7 @@
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'featured-slideshow.css' | asset_url | stylesheet_tag }}
 {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-<script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 <link rel="stylesheet" href="{{ 'template-collection.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- liquid 
@@ -164,7 +164,7 @@
 </featured-slideshow>
 
 
-<script data-lazy-src="{{ 'featured-slideshow.js' | asset_url }}" data-lazy-module="true"></script>
+<script src="{{ 'featured-slideshow.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

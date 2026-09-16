@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="{{ 'section-contact-form.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'section-contact-form.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'section-contact-form.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {

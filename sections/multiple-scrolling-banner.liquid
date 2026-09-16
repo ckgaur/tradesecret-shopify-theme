@@ -1,9 +1,5 @@
-<link rel="stylesheet" href="{{ 'section-scrolling-banner.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'section-multiple-scrolling-banner.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>
-  {{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag }}
-  {{ 'section-multiple-scrolling-banner.css' | asset_url | stylesheet_tag }}
-</noscript>
+{{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-multiple-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -219,7 +215,7 @@
 	{% endif %}
 </scrolling-banner>
 
-<script data-lazy-src="{{ 'multiple-scrolling-banner.js' | asset_url }}" data-lazy-module="true"></script>
+<script src="{{ 'multiple-scrolling-banner.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

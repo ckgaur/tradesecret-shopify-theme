@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="{{ 'section-scrolling-banner.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -100,11 +99,8 @@
 	</marquee-text>
 </div>
 
-<script
-  data-lazy-src="{{ 'scrolling-banner.js' | asset_url }}"
-  data-lazy-module="true"
-  data-lazy-deps="{{ 'gsap.min.js' | asset_url }}"
-></script>
+<script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'scrolling-banner.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

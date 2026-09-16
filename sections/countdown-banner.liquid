@@ -108,7 +108,7 @@
 
 {% unless section.settings.full_width %}</div>{% endunless %}
 
-<script data-lazy-src="{{ 'countdown.js' | asset_url }}" data-lazy-module="true"></script>
+<script src="{{ 'countdown.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

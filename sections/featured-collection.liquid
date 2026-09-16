@@ -1,16 +1,9 @@
-<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'section-featured-collection.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
+{{ 'component-card.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'component-price.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag: preload: true }}
 <link rel="stylesheet" href="{{ 'template-collection.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'swiper.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>
-  {{ 'component-card.css' | asset_url | stylesheet_tag }}
-  {{ 'component-price.css' | asset_url | stylesheet_tag }}
-  {{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
-  {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-  {{ 'swiper.css' | asset_url | stylesheet_tag }}
-</noscript>
+{{ 'swiper.css' | asset_url | stylesheet_tag: preload: true }}
 
 {% if section.settings.enable_product_variants %}
   {{ 'product-card-variants.css' | asset_url | stylesheet_tag }}
@@ -25,8 +18,8 @@
 
 {%- if section.settings.enable_quick_add -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
-  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- liquid
@@ -286,8 +279,8 @@
   </div>
 </featured-collection>
 
-<script data-lazy-src="{{ 'featured-collection.js' | asset_url }}" data-lazy-module="true"></script>
-<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
+<script src="{{ 'featured-collection.js' | asset_url }}" type="module" defer="defer"></script>
+<script src="{{ 'product-model.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

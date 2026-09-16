@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="{{ 'section-showcase.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'section-showcase.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'section-showcase.css' | asset_url | stylesheet_tag: preload: true }}
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -135,7 +134,7 @@
   
 </div>
 
-<script data-lazy-src="{{ 'showcase.js' | asset_url }}" data-lazy-module="true"></script>
+<script src="{{ 'showcase.js' | asset_url }}" type="module" defer="defer"></script>
 
 {% schema %}
 {

@@ -23,7 +23,7 @@
 
 {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
   {{ 'component-facets.css' | asset_url | stylesheet_tag }}
-  <script data-lazy-src="{{ 'facets.js' | asset_url }}"></script>
+  <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {% if section.settings.image_shape == 'blob' %}
@@ -31,14 +31,14 @@
 {%- endif -%}
 
 {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-<script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
-<script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
 {%- if section.settings.show_breadcrumbs -%}
 	{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
-<script data-lazy-src="{{ 'main-search.js' | asset_url }}"></script>
+<script src="{{ 'main-search.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign sort_by = search.sort_by | default: search.default_sort_by
@@ -469,7 +469,7 @@
   {% render 'mask-arch' %}
 {%- endif -%}
 
-<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
+<script src="{{ 'product-model.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

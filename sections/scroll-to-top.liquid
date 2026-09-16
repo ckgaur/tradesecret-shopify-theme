@@ -14,7 +14,7 @@
 		</style>
 	{% endif %}
 
-  <script data-lazy-src="{{ 'scroll-to-top.js' | asset_url }}"></script>
+  <script src="{{ 'scroll-to-top.js' | asset_url }}" defer="defer"></script>
 
   {% assign hide_border = '' %}
 {% if section.settings.hide_border %}

@@ -18,7 +18,7 @@
 	</div>
 {%- endif -%}
 
-<script data-lazy-src="{{ 'media-gallery.js' | asset_url }}"></script>
+<script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
 
 <section
   id="MainProduct-{{ section.id }}"
@@ -40,18 +40,18 @@
     {{ 'component-volume-pricing.css' | asset_url | stylesheet_tag }}
   {%- endif -%}
 
-  <script data-lazy-src="{{ 'product-info.js' | asset_url }}"></script>
-  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
+  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
-    <script data-lazy-src="{{ 'show-more.js' | asset_url }}"></script>
-    <script data-lazy-src="{{ 'price-per-item.js' | asset_url }}"></script>
+    <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 
   {% if section.settings.image_zoom == 'hover' %}
-    <script id="EnableZoomOnHover-main" data-lazy-src="{{ 'magnify.js' | asset_url }}"></script>
+    <script id="EnableZoomOnHover-main" src="{{ 'magnify.js' | asset_url }}" defer="defer"></script>
   {% endif %}
   {%- if request.design_mode -%}
-    <script data-lazy-src="{{ 'theme-editor.js' | asset_url }}"></script>
+    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
   {%- endif -%}
 
   {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
@@ -532,7 +532,7 @@
   </template>
 </pickup-availability>
 
-<script data-lazy-src="{{ 'pickup-availability.js' | asset_url }}"></script>
+<script src="{{ 'pickup-availability.js' | asset_url }}" defer></script>
 {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
           
 {%comment%}Ends here{%endcomment %}
@@ -660,7 +660,7 @@
                   {{ 'component-card.css' | asset_url | stylesheet_tag }}
 									<link rel="stylesheet" href="{{ 'component-complementary-products.css' | asset_url }}" media="print" onload="this.media='all'">
 
-									<script data-lazy-src="{{ 'swiper-slider.js' | asset_url }}" data-lazy-module="true"></script>
+									<script src="{{ 'swiper-slider.js' | asset_url }}" type="module" defer="defer"></script>
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
 								{% liquid
@@ -714,7 +714,7 @@
       </modal-dialog>
     {%- endfor -%}
 
-		<script data-lazy-src="{{ 'product-modal.js' | asset_url }}"></script>
+		<script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
 
     {%- if first_3d_model -%}
       <script type="application/json" id="ProductJSON-{{ product.id }}">
@@ -722,7 +722,7 @@
       </script>
     {%- endif -%}
 
-		<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
+		<script src="{{ 'product-model.js' | asset_url }}" defer></script>
 
     <script>
       try {

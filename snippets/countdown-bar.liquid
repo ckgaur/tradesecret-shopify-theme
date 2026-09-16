@@ -14,8 +14,7 @@
   {% render 'countdown-bar' %}
 {% endcomment %}
 
-<link rel="stylesheet" href="{{ 'component-countdown-bar.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'component-countdown-bar.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'component-countdown-bar.css' | asset_url | stylesheet_tag }}
 
 <countdown-bar id="countdownBar-{{ section.id }}" class="countdown-bar countdown-bar-js{% if settings.animations_reveal_on_scroll and position != 'cart-drawer' %} scroll-trigger animate--slide-in{% endif %}" data-date="{{ date }}" data-complited="{{ complited }}">
   {%- if label != blank -%}
@@ -70,4 +69,4 @@
 
 </countdown-bar>
 
-<script data-lazy-src="{{ 'countdown.js' | asset_url }}"></script>
+<script src="{{ 'countdown.js' | asset_url }}" defer="defer"></script>

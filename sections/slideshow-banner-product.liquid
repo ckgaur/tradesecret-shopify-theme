@@ -4,7 +4,7 @@
 {{ 'slideshow-banner-product-slider.css' | asset_url | stylesheet_tag }}
 
 {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-<script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid 
 	assign slides_per_view = 1	
@@ -314,11 +314,11 @@
 </div>
 
 {%- if request.design_mode -%}
-  <script data-lazy-src="{{ 'theme-editor.js' | asset_url }}"></script>
+  <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-<script data-lazy-src="{{ 'slideshow.js' | asset_url }}"></script>
-<script data-lazy-src="{{ 'slideshow-banner-product-slider.js' | asset_url }}"></script>
+<script src="{{ 'slideshow.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'slideshow-banner-product-slider.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {

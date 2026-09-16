@@ -5,8 +5,8 @@
 <link rel="stylesheet" href="{{ 'component-complementary-products.css' | asset_url }}" media="print" onload="this.media='all'">
 {{ 'swiper.css' | asset_url | stylesheet_tag }}
 {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-<script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
-<script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   #shopify-section-{{ section.id }} {
@@ -178,7 +178,7 @@
   </div>
 </div>
 
-<script data-lazy-src="{{ 'main-cart-footer.js' | asset_url }}"></script>
+<script src="{{ 'main-cart-footer.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {

@@ -17,27 +17,6 @@
 
 		<link rel="preconnect" href="https://cdn.shopify.com">
 		<link rel="dns-prefetch" href="https://cdn.shopify.com">
-
-		<link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
-
-		<style>
-			@media (min-width: 1200px) {
-				.header.js-initializing {
-					visibility: hidden;
-				}
-				.header__content {
-					max-width: 85%;
-					margin: 0 auto;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-				}
-				.header__inline-menu {
-					max-width: 100% !important;
-					width: 100% !important;
-				}
-			}
-		</style>
 		
     <title>
       {{ page_title }}
@@ -64,19 +43,18 @@
 					} catch (e) {}
 				})();
 			</script>
-			<script data-lazy-src="{{ 'color-scheme-toggle.js' | asset_url }}"></script>
+			<script src="{{ 'color-scheme-toggle.js' | asset_url }}" defer="defer"></script>
     {% endif %}
 
-    <script data-lazy-src="{{ 'constants.js' | asset_url }}"></script>
-    <script data-lazy-src="{{ 'pubsub.js' | asset_url }}"></script>
-    <script data-lazy-src="{{ 'global.js' | asset_url }}"></script>
+    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <script data-lazy-src="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
-    {%- if template.name == 'product' -%}
-      <script data-lazy-src="{{ 'swiper-slider.js' | asset_url }}" data-lazy-deps="{{ 'swiper-bundle.min.js' | asset_url }}"></script>
-    {%- endif -%}
+    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
     {%- if settings.animations_reveal_on_scroll -%}
-      <script data-lazy-src="{{ 'animations.js' | asset_url }}"></script>
+      <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {{ content_for_header }}
@@ -480,9 +458,8 @@
     {%- endunless -%}
 
     {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
-      <link rel="stylesheet" href="{{ 'component-localization-form.css' | asset_url }}" media="print" onload="this.media='all'">
-      <noscript>{{ 'component-localization-form.css' | asset_url | stylesheet_tag }}</noscript>
-      <script data-lazy-src="{{ 'localization-form.js' | asset_url }}"></script>
+      {{ 'component-localization-form.css' | asset_url | stylesheet_tag: preload: true }}
+      <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
@@ -568,31 +545,6 @@ display:block !important;
 
 {% else %}
   {% sections 'header-group' %}
-  <script>
-  (function() {
-    if (!window.matchMedia("(min-width: 1200px)").matches) return;
-
-    var header = document.querySelector(".header");
-    if (!header || header.querySelector(".header__content")) return;
-
-    header.classList.add("js-initializing");
-
-    var wrapper = document.createElement("div");
-    wrapper.classList.add("header__content");
-
-    var menu = header.querySelector(".header__inline-menu");
-    var children = Array.prototype.slice.call(header.children);
-
-    children.forEach(function(child) {
-      if (child !== menu) {
-        wrapper.appendChild(child);
-      }
-    });
-
-    header.insertBefore(wrapper, menu);
-    header.classList.remove("js-initializing");
-  })();
-  </script>
 {% endif %}
 
 
@@ -711,7 +663,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {%- endif -%}
 
     {%- if settings.predictive_search_enabled -%}
-      <script data-lazy-src="{{ 'predictive-search.js' | asset_url }}"></script>
+      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
 		{%- if settings.cart_type == 'drawer' -%}
@@ -764,6 +716,65 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 </script>
+<style>
+  @media (min-width: 1200px) {
+    .header.js-initializing {
+      visibility: hidden;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Run only if screen is >= 1200px
+  if (!window.matchMedia("(min-width: 1200px)").matches) return;
+
+  const header = document.querySelector(".header");
+  if (!header) return;
+
+  // Temporarily hide header to prevent layout shift
+  header.classList.add("js-initializing");
+
+  // Create wrapper
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("header__content");
+
+  const menu = header.querySelector(".header__inline-menu");
+  const children = Array.from(header.children);
+
+  children.forEach(child => {
+    if (child !== menu) {
+      wrapper.appendChild(child);
+    }
+  });
+
+  header.insertBefore(wrapper, menu);
+
+  // Apply styles
+  const style = document.createElement("style");
+  style.innerHTML = `
+    @media (min-width: 1200px) {
+      .header__content {
+        max-width: 85%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header__inline-menu {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Reveal header once done
+  header.classList.remove("js-initializing");
+});
+</script>
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   // Check if site is on French version (/fr path)
@@ -884,9 +895,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   #us-redirect-popup, #us-redirect-popup * {
     box-sizing: border-box !important;
@@ -1066,10 +1075,7 @@ document.addEventListener("DOMContentLoaded", function() {
 })();
 </script>
 
-<script
-  src="{{ 'lazy-sections.js' | asset_url }}"
-  defer>
-</script>
+
 
   </body>
 </html>

@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="{{ 'section-image-banner.css' | asset_url }}" media="print" onload="this.media='all'">
-<noscript>{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}</noscript>
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag: preload: true }}
 
 {% liquid
 	assign img = section.settings.image 

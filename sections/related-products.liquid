@@ -16,8 +16,8 @@
 
 {%- if section.settings.enable_quick_add -%}
   {{ 'quick-add.css' | asset_url | stylesheet_tag }}
-  <script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
-  <script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
 {%- style -%}
@@ -126,7 +126,7 @@
 	{%- endif -%}
 </div>
 
-<script data-lazy-src="{{ 'product-model.js' | asset_url }}"></script>
+<script src="{{ 'product-model.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

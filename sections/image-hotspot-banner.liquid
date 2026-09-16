@@ -11,8 +11,8 @@
 	}
 {%- endstyle -%}
 
-<script data-lazy-src="{{ 'product-form.js' | asset_url }}"></script>
-<script data-lazy-src="{{ 'quick-add.js' | asset_url }}"></script>
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
 
 <div class="section-responsive-padding color-{{ section.settings.color_scheme }} gradient">
   <div class="image-hotspot{% if section.settings.full_width %} full-width{% else %} page-width{% endif %}">

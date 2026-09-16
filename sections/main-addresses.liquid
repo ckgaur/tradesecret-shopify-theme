@@ -3,7 +3,7 @@
 	{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
 {%- endif -%}
 
-<script data-lazy-src="{{ 'customer.js' | asset_url }}"></script>
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
 
 
 {%- style -%}
