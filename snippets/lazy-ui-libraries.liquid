@@ -1,24 +1,24 @@
 {%- comment -%}
-  Swiper and GSAP are only needed once a slider/animated element is about to
-  be interacted with or scrolled to, so their download is deferred until the
-  customer interacts with the page (scroll, move, tap, key, click) or a
+  GSAP is only needed once an animated element is about to be scrolled to,
+  and animations.js already gates its own work behind
+  settings.animations_reveal_on_scroll, so its download is deferred until
+  the customer interacts with the page (scroll, move, tap, key, click) or a
   5-second fallback timeout — same pattern as the third-party scripts.
 
-  Load order matters: swiper-slider.js and animations.js reference the
-  `Swiper` / `gsap` globals directly, so each only loads after its library
-  has finished loading.
+  Note: swiper-bundle.js/css are intentionally NOT deferred here.
+  slider-announcement-bar.js (used by the always-visible announcement bar)
+  calls `new Swiper(...)` synchronously as soon as its custom element
+  connects, with no readiness check — deferring the Swiper library made
+  that throw "Swiper is not defined" on every page load and broke the
+  announcement bar carousel. swiper-slider.js is safe to lazy-load on its
+  own (it defers init via IntersectionObserver), but the library it
+  depends on is not, so both stay on the regular eager <script> tags in
+  theme.liquid.
 {%- endcomment -%}
 <script>
 (function () {
   var loaded = false;
   var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
-
-  function loadStylesheet(href) {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-  }
 
   function loadScript(src, onload) {
     var s = document.createElement('script');
@@ -31,11 +31,6 @@
   function loadUILibraries() {
     if (loaded) return;
     loaded = true;
-
-    loadStylesheet('{{ "swiper-bundle.min.css" | asset_url }}');
-    loadScript('{{ "swiper-bundle.min.js" | asset_url }}', function () {
-      loadScript('{{ "swiper-slider.js" | asset_url }}');
-    });
 
     loadScript('{{ "gsap.min.js" | asset_url }}', function () {
       {%- if settings.animations_reveal_on_scroll -%}

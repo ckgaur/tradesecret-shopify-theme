@@ -12,6 +12,7 @@
             width="{{ block.settings.image.width }}"
             height="{{ block.settings.image.height }}"
             alt="{{ block.settings.image.alt | escape | default: block.settings.heading | escape }}"
+            style="aspect-ratio: {{ block.settings.image.aspect_ratio }};"
             {% if forloop.first %}
               loading="eager"
               fetchpriority="high"
