@@ -1,0 +1,220 @@
+{%- comment -%}
+  US VISITOR REDIRECT POPUP — Trade Secrets (tradesecrets.ca)
+  ---------------------------------------------------------------
+  Detects visitors browsing from outside Canada (using Shopify's native,
+  free geolocation endpoint) and invites them to shop GlamourSecrets.com
+  instead, since Trade Secrets only ships within Canada.
+{%- endcomment -%}
+<div id="us-redirect-popup" style="display:none;">
+  <div id="us-redirect-overlay"></div>
+  <div id="us-redirect-modal" role="dialog" aria-modal="true" aria-labelledby="us-redirect-title">
+    <button type="button" id="us-redirect-close" aria-label="Close">&times;</button>
+
+    <div class="us-redirect-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+        <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/>
+        <circle cx="12" cy="9.5" r="2.5"/>
+      </svg>
+    </div>
+
+    <p id="us-redirect-title">Looks like you're visiting from the United States</p>
+    <p id="us-redirect-subtext">
+      Trade Secrets ships within Canada only. Shop on our U.S store
+      <strong>GlamourSecrets.com</strong> for US shipping and full checkout.
+    </p>
+
+    <div id="us-redirect-actions">
+      <a id="us-redirect-continue" href="https://glamoursecrets.com">
+        Continue to U.S Shop
+      </a>
+      <button type="button" id="us-redirect-stay">
+        Stay on TradeSecrets.ca
+      </button>
+    </div>
+  </div>
+</div>
+
+{% render 'third-party-styles' %}
+
+<style>
+  #us-redirect-popup, #us-redirect-popup * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    float: none !important;
+  }
+  #us-redirect-overlay {
+    position: fixed !important; inset: 0 !important;
+    background: rgba(0,0,0,0.5) !important; z-index: 9998 !important;
+  }
+  #us-redirect-modal {
+    position: fixed !important;
+    top: 50% !important; left: 50% !important;
+    transform: translate(-50%,-50%) !important;
+    background: #ffffff !important;
+    width: 90% !important; max-width: 400px !important;
+    padding: 32px 28px 28px !important;
+    border-radius: 4px !important;
+    z-index: 9999 !important;
+    text-align: center !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+    font-family: 'Poppins', sans-serif !important;
+    display: block !important;
+  }
+  #us-redirect-close {
+    position: absolute !important;
+    top: 12px !important; right: 14px !important;
+    width: 28px !important; height: 28px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    background: none !important;
+    font-size: 22px !important; line-height: 1 !important;
+    color: #888 !important; cursor: pointer !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-close:hover { color: #171717 !important; }
+  #us-redirect-popup .us-redirect-icon {
+    width: 44px !important; height: 44px !important;
+    border-radius: 50% !important; background: #f2f2f2 !important;
+    color: #171717 !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    margin: 0 auto 14px auto !important;
+  }
+  #us-redirect-title {
+    display: block !important;
+    font-size: 16px !important; font-weight: 600 !important;
+    margin: 0 0 8px !important; color: #171717 !important;
+    line-height: 1.4 !important;
+  }
+  #us-redirect-subtext {
+    display: block !important;
+    font-size: 13.5px !important; font-weight: 400 !important;
+    color: #555 !important; margin: 0 0 22px !important; line-height: 1.5 !important;
+  }
+  #us-redirect-subtext strong { color: #171717 !important; font-weight: 600 !important; }
+  #us-redirect-actions {
+    display: flex !important; flex-direction: column !important; gap: 10px !important;
+    width: 100% !important;
+  }
+  #us-redirect-continue {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    width: 100% !important; height: 44px !important;
+    background: #c8102e !important; color: #ffffff !important;
+    text-decoration: none !important;
+    border-radius: 4px !important;
+    font-size: 14px !important; font-weight: 500 !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-continue:hover { background: #a80d26 !important; }
+  #us-redirect-stay {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    width: 100% !important; height: 44px !important;
+    background: transparent !important;
+    border: 1px solid #171717 !important;
+    border-radius: 4px !important;
+    font-size: 14px !important; font-weight: 500 !important;
+    color: #171717 !important; cursor: pointer !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-stay:hover { background: #f2f2f2 !important; }
+  @media (max-width: 480px) {
+    #us-redirect-modal { padding: 28px 20px 22px !important; }
+  }
+</style>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'ts_geo_popup_dismissed';
+  var DISMISS_DAYS = 30;
+
+  function isDismissed() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      var expires = parseInt(raw, 10);
+      return Date.now() < expires;
+    } catch (e) { return false; }
+  }
+
+  function setDismissed() {
+    try {
+      var expires = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
+      localStorage.setItem(STORAGE_KEY, String(expires));
+    } catch (e) {}
+  }
+
+  function showPopup() {
+    var el = document.getElementById('us-redirect-popup');
+    if (!el) return;
+    el.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePopup() {
+    var el = document.getElementById('us-redirect-popup');
+    if (!el) return;
+    el.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function init() {
+    if (isDismissed()) return;
+
+    fetch('/browsing_context_suggestions.json', { credentials: 'same-origin' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) {
+        console.log('[US redirect popup] geolocation response:', data);
+
+        if (!data || !data.detected_values) {
+          console.log('[US redirect popup] no detected_values in response — popup will not show');
+          return;
+        }
+
+        var dv = data.detected_values;
+        var code = (dv.country && (dv.country.handle || dv.country.iso_code)) ||
+                    dv.country_code || null;
+        var name = (dv.country && dv.country.name) || dv.country_name || null;
+
+        var isCanada = code === 'CA' || name === 'Canada';
+        var detectedSomething = !!(code || name);
+
+        console.log('[US redirect popup] detected country code:', code, '| name:', name, '| will show popup:', (detectedSomething && !isCanada));
+
+        if (detectedSomething && !isCanada) {
+          showPopup();
+        }
+      })
+      .catch(function (err) {
+        console.log('[US redirect popup] geolocation fetch failed:', err);
+        // Fail silently — if geolocation lookup fails, no popup is shown
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('us-redirect-close').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-stay').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-overlay').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-continue').addEventListener('click', function () {
+      setDismissed();
+    });
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, { timeout: 3000 });
+    } else {
+      setTimeout(init, 1500);
+    }
+  });
+})();
+</script>

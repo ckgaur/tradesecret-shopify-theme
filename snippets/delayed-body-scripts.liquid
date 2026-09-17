@@ -1,0 +1,64 @@
+{%- comment -%}
+  Non-critical body scripts that don't need to run before the customer can
+  interact with the page (footer link target, FR booking-button copy, and
+  the customer-tag discount redirect). Deferred until the customer
+  interacts with the page or a 5-second fallback timeout — same pattern as
+  the third-party scripts.
+{%- endcomment -%}
+<script>
+(function () {
+  var loaded = false;
+  var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
+
+  function run() {
+    if (loaded) return;
+    loaded = true;
+
+    document.querySelectorAll('footer a').forEach(function (link) {
+      if (link.textContent.trim() === 'About Us') {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+      }
+    });
+
+    if (window.location.pathname.startsWith('/fr')) {
+      var bookingBtnText = document.querySelector('.salon-booking-button .text');
+      if (bookingBtnText && bookingBtnText.textContent.trim() === 'Book a Salon Service') {
+        bookingBtnText.textContent = 'Réserver un service de salon';
+      }
+
+      var bookingBtn = document.querySelector('.salon-booking-button');
+      if (bookingBtn) {
+        bookingBtn.setAttribute('title', 'Réserver un service de salon');
+      }
+    }
+
+    {%- if customer -%}
+    if (!sessionStorage.getItem('discountApplied')) {
+      {%- if customer.tags contains 'FREE' -%}
+      if (!window.location.href.includes('discount=FREE CUSTOMERS')) {
+        sessionStorage.setItem('discountApplied', 'true');
+        window.location.href = '/discount/FREE CUSTOMERS';
+      }
+      {%- elsif customer.tags contains 'PRO' -%}
+      if (!window.location.href.includes('discount=PRO CUSTOMERS')) {
+        sessionStorage.setItem('discountApplied', 'true');
+        window.location.href = '/discount/PRO CUSTOMERS';
+      }
+      {%- endif -%}
+    }
+    {%- endif -%}
+
+    events.forEach(function (evt) {
+      window.removeEventListener(evt, run, { passive: true });
+    });
+    clearTimeout(fallback);
+  }
+
+  events.forEach(function (evt) {
+    window.addEventListener(evt, run, { passive: true, once: true });
+  });
+
+  var fallback = setTimeout(run, 5000);
+})();
+</script>

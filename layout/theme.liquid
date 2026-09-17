@@ -48,11 +48,9 @@
 
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
-    <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+
+    {% render 'lazy-ui-libraries' %}
 
     <script>
       // Loads a script once the customer interacts OR the page finishes loading OR a timeout is hit — whichever comes first.
@@ -82,10 +80,6 @@
         var fallback = setTimeout(load, 8000);
       };
     </script>
-
-    {%- if settings.animations_reveal_on_scroll -%}
-      <script>window.__lazyLoadScript('{{ "animations.js" | asset_url }}');</script>
-    {%- endif -%}
 
     {{ content_for_header }}
 
@@ -474,7 +468,7 @@
       }
     {% endstyle %}
 
-    {{ 'base.css' | asset_url | stylesheet_tag }}
+    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
 
     {%- unless settings.type_body_font.system? -%}
       {% comment %}theme-check-disable AssetPreload{% endcomment %}
@@ -508,59 +502,7 @@
       }
     </script>
 
-<!-- Google tag (gtag.js) -->
-<!--script async src="https://www.googletagmanager.com/gtag/js?id=G-08Y889TLCZ"></script-->
-<!--script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-08Y889TLCZ');
-</script-->
-
-
-<!-- Google tag (gtag.js) -->
-<!--script async src="https://www.googletagmanager.com/gtag/js?id=AW-17021080848"></script-->
-<!--script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'AW-17021080848');
-</script-->
-
-<!-- Google Tag Manager (event-delayed load) -->
-<script>
-(function(w,d,s,l,i){
-  w[l]=w[l]||[];
-  w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
-
-  var loaded = false;
-  function loadGTM() {
-    if (loaded) return;
-    loaded = true;
-    var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),
-        dl=l!='dataLayer'?'&l='+l:'';
-    j.async=true;
-    j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-    f.parentNode.insertBefore(j,f);
-
-    events.forEach(function(evt) {
-      w.removeEventListener(evt, loadGTM, { passive: true });
-    });
-    clearTimeout(fallback);
-  }
-
-  var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
-  events.forEach(function(evt) {
-    w.addEventListener(evt, loadGTM, { passive: true, once: true });
-  });
-
-  var fallback = setTimeout(loadGTM, 5000);
-})(window,document,'script','dataLayer','GTM-M27MMJCW');
-</script>
-<!-- End Google Tag Manager -->
+{% render 'third-party-scripts' %}
 
 <style>
 body .collection .card__wrapper .product-form button{
@@ -569,14 +511,6 @@ display:block !important;
 
 </style>
 
-
-<!-- CHATMX Tag -->
-<!--script src="https://api.chatmx.io/widget/embed.js" data-chatbot-id="69a66b3b13404fdfcb4e98cf"--><!--/script-->
-<!-- End CHATMX Tag -->
-
-
-
-
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %} {% if settings.page_width >= 1560 %} extra-large-layout {% endif %} {% if settings.enable_custom_heading_line_height == true %} custom-line-height {% endif %}">
@@ -584,10 +518,7 @@ display:block !important;
       {{ 'accessibility.skip_to_text' | t }}
     </a>
 
-	<!-- Google Tag Manager (noscript) -->
-	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M27MMJCW"
-	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-	<!-- End Google Tag Manager (noscript) -->
+	{% render 'gtm-noscript' %}
 
 		<mouse-cursor id="mouse-cursor">{% render 'icon-close' %}</mouse-cursor>
 
@@ -720,38 +651,6 @@ display:block !important;
       {%- render 'cart-drawer' -%}
     {%- endif -%}
 
-	<script>
-(function() {
-  var loaded = false;
-  function loadButterly() {
-    if (loaded) return;
-    loaded = true;
-    var today = new Date();
-    var stamp = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-    var e = document.createElement('script');
-    e.type = 'text/javascript';
-    e.async = true;
-    e.defer = true;
-    e.src = 'https://butterly.com/richmedia/socialfeed/socialEmbed.js?stamp=' + stamp;
-    var t = document.getElementsByTagName('script')[0];
-    t.parentNode.insertBefore(e, t);
-
-    events.forEach(function(evt) {
-      window.removeEventListener(evt, loadButterly, { passive: true });
-    });
-    clearTimeout(fallback);
-  }
-
-  var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
-  events.forEach(function(evt) {
-    window.addEventListener(evt, loadButterly, { passive: true, once: true });
-  });
-
-  var fallback = setTimeout(loadButterly, 5000);
-})();
-</script>
-
-
 <script>
 	document.querySelectorAll('details.mega-menu > summary').forEach(summary => {
   summary.addEventListener('click', function(e) {
@@ -773,16 +672,6 @@ display:block !important;
 </script>
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll("footer a").forEach(function(link) {
-    if (link.textContent.trim() === "About Us") {
-      link.setAttribute("target", "_blank");
-      link.setAttribute("rel", "noopener");
-    }
-  });
-});
-</script>
 <style>
   @media (min-width: 1200px) {
     .header.js-initializing {
@@ -843,26 +732,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  // Check if site is on French version (/fr path)
-  if (window.location.pathname.startsWith("/fr")) {
-    const bookingBtnText = document.querySelector(".salon-booking-button .text");
-    if (bookingBtnText && bookingBtnText.textContent.trim() === "Book a Salon Service") {
-      bookingBtnText.textContent = "Réserver un service de salon";
-    }
-    
-    // Also update the button's title attribute if needed
-    const bookingBtn = document.querySelector(".salon-booking-button");
-    if (bookingBtn) {
-      bookingBtn.setAttribute("title", "Réserver un service de salon");
-    }
-  }
-});
-</script>
-
-
-
-<script>
   document.addEventListener("DOMContentLoaded", function () {
   const sortContainer = document.querySelector('#SortBy');
   if (!sortContainer) return;
@@ -903,253 +772,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </script>
 
-{% if customer %}
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // check if discount was already applied this session
-      if (!sessionStorage.getItem("discountApplied")) {
-        {% if customer.tags contains "FREE" %}
-          if (!window.location.href.includes("discount=FREE CUSTOMERS")) {
-            sessionStorage.setItem("discountApplied", "true");
-            window.location.href = "/discount/FREE CUSTOMERS";
-          }
-        {% elsif customer.tags contains "PRO" %}
-          if (!window.location.href.includes("discount=PRO CUSTOMERS")) {
-            sessionStorage.setItem("discountApplied", "true");
-            window.location.href = "/discount/PRO CUSTOMERS";
-          }
-        {% endif %}
-      }
-    });
-  </script>
-{% endif %}
+{% render 'delayed-body-scripts' %}
 
-
-<!--
-  US VISITOR REDIRECT POPUP — Trade Secrets (tradesecrets.ca)
-  ---------------------------------------------------------------
-  Detects visitors browsing from outside Canada (using Shopify's native,
-  free geolocation endpoint) and invites them to shop GlamourSecrets.com
-  instead, since Trade Secrets only ships within Canada.
--->
-<div id="us-redirect-popup" style="display:none;">
-  <div id="us-redirect-overlay"></div>
-  <div id="us-redirect-modal" role="dialog" aria-modal="true" aria-labelledby="us-redirect-title">
-    <button type="button" id="us-redirect-close" aria-label="Close">&times;</button>
-
-    <div class="us-redirect-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
-        <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/>
-        <circle cx="12" cy="9.5" r="2.5"/>
-      </svg>
-    </div>
-
-    <p id="us-redirect-title">Looks like you're visiting from the United States</p>
-    <p id="us-redirect-subtext">
-      Trade Secrets ships within Canada only. Shop on our U.S store
-      <strong>GlamourSecrets.com</strong> for US shipping and full checkout.
-    </p>
-
-    <div id="us-redirect-actions">
-      <a id="us-redirect-continue" href="https://glamoursecrets.com">
-        Continue to U.S Shop
-      </a>
-      <button type="button" id="us-redirect-stay">
-        Stay on TradeSecrets.ca
-      </button>
-    </div>
-  </div>
-</div>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link
-  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-  rel="stylesheet"
-  media="print"
-  onload="this.media='all'"
->
-<style>
-  #us-redirect-popup, #us-redirect-popup * {
-    box-sizing: border-box !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    text-shadow: none !important;
-    letter-spacing: normal !important;
-    text-transform: none !important;
-    float: none !important;
-  }
-  #us-redirect-overlay {
-    position: fixed !important; inset: 0 !important;
-    background: rgba(0,0,0,0.5) !important; z-index: 9998 !important;
-  }
-  #us-redirect-modal {
-    position: fixed !important;
-    top: 50% !important; left: 50% !important;
-    transform: translate(-50%,-50%) !important;
-    background: #ffffff !important;
-    width: 90% !important; max-width: 400px !important;
-    padding: 32px 28px 28px !important;
-    border-radius: 4px !important;
-    z-index: 9999 !important;
-    text-align: center !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
-    font-family: 'Poppins', sans-serif !important;
-    display: block !important;
-  }
-  #us-redirect-close {
-    position: absolute !important;
-    top: 12px !important; right: 14px !important;
-    width: 28px !important; height: 28px !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    background: none !important;
-    font-size: 22px !important; line-height: 1 !important;
-    color: #888 !important; cursor: pointer !important;
-    font-family: 'Poppins', sans-serif !important;
-  }
-  #us-redirect-close:hover { color: #171717 !important; }
-  #us-redirect-popup .us-redirect-icon {
-    width: 44px !important; height: 44px !important;
-    border-radius: 50% !important; background: #f2f2f2 !important;
-    color: #171717 !important;
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    margin: 0 auto 14px auto !important;
-  }
-  #us-redirect-title {
-    display: block !important;
-    font-size: 16px !important; font-weight: 600 !important;
-    margin: 0 0 8px !important; color: #171717 !important;
-    line-height: 1.4 !important;
-  }
-  #us-redirect-subtext {
-    display: block !important;
-    font-size: 13.5px !important; font-weight: 400 !important;
-    color: #555 !important; margin: 0 0 22px !important; line-height: 1.5 !important;
-  }
-  #us-redirect-subtext strong { color: #171717 !important; font-weight: 600 !important; }
-  #us-redirect-actions {
-    display: flex !important; flex-direction: column !important; gap: 10px !important;
-    width: 100% !important;
-  }
-  #us-redirect-continue {
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    width: 100% !important; height: 44px !important;
-    background: #c8102e !important; color: #ffffff !important;
-    text-decoration: none !important;
-    border-radius: 4px !important;
-    font-size: 14px !important; font-weight: 500 !important;
-    font-family: 'Poppins', sans-serif !important;
-  }
-  #us-redirect-continue:hover { background: #a80d26 !important; }
-  #us-redirect-stay {
-    display: flex !important; align-items: center !important; justify-content: center !important;
-    width: 100% !important; height: 44px !important;
-    background: transparent !important;
-    border: 1px solid #171717 !important;
-    border-radius: 4px !important;
-    font-size: 14px !important; font-weight: 500 !important;
-    color: #171717 !important; cursor: pointer !important;
-    font-family: 'Poppins', sans-serif !important;
-  }
-  #us-redirect-stay:hover { background: #f2f2f2 !important; }
-  @media (max-width: 480px) {
-    #us-redirect-modal { padding: 28px 20px 22px !important; }
-  }
-</style>
-
-<script>
-(function () {
-  var STORAGE_KEY = 'ts_geo_popup_dismissed';
-  var DISMISS_DAYS = 30;
-
-  function isDismissed() {
-    try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return false;
-      var expires = parseInt(raw, 10);
-      return Date.now() < expires;
-    } catch (e) { return false; }
-  }
-
-  function setDismissed() {
-    try {
-      var expires = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
-      localStorage.setItem(STORAGE_KEY, String(expires));
-    } catch (e) {}
-  }
-
-  function showPopup() {
-    var el = document.getElementById('us-redirect-popup');
-    if (!el) return;
-    el.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-  }
-
-  function hidePopup() {
-    var el = document.getElementById('us-redirect-popup');
-    if (!el) return;
-    el.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-
-  function init() {
-    if (isDismissed()) return;
-
-    fetch('/browsing_context_suggestions.json', { credentials: 'same-origin' })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) {
-        console.log('[US redirect popup] geolocation response:', data);
-
-        if (!data || !data.detected_values) {
-          console.log('[US redirect popup] no detected_values in response — popup will not show');
-          return;
-        }
-
-        var dv = data.detected_values;
-        var code = (dv.country && (dv.country.handle || dv.country.iso_code)) ||
-                    dv.country_code || null;
-        var name = (dv.country && dv.country.name) || dv.country_name || null;
-
-        var isCanada = code === 'CA' || name === 'Canada';
-        var detectedSomething = !!(code || name);
-
-        console.log('[US redirect popup] detected country code:', code, '| name:', name, '| will show popup:', (detectedSomething && !isCanada));
-
-        if (detectedSomething && !isCanada) {
-          showPopup();
-        }
-      })
-      .catch(function (err) {
-        console.log('[US redirect popup] geolocation fetch failed:', err);
-        // Fail silently — if geolocation lookup fails, no popup is shown
-      });
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('us-redirect-close').addEventListener('click', function () {
-      setDismissed();
-      hidePopup();
-    });
-    document.getElementById('us-redirect-stay').addEventListener('click', function () {
-      setDismissed();
-      hidePopup();
-    });
-    document.getElementById('us-redirect-overlay').addEventListener('click', function () {
-      setDismissed();
-      hidePopup();
-    });
-    document.getElementById('us-redirect-continue').addEventListener('click', function () {
-      setDismissed();
-    });
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(init, { timeout: 3000 });
-    } else {
-      setTimeout(init, 1500);
-    }
-  });
-})();
-</script>
+{% render 'geo-redirect-popup' %}
 
 
 

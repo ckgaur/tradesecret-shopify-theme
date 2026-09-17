@@ -1,0 +1,58 @@
+{%- comment -%}
+  Swiper and GSAP are only needed once a slider/animated element is about to
+  be interacted with or scrolled to, so their download is deferred until the
+  customer interacts with the page (scroll, move, tap, key, click) or a
+  5-second fallback timeout — same pattern as the third-party scripts.
+
+  Load order matters: swiper-slider.js and animations.js reference the
+  `Swiper` / `gsap` globals directly, so each only loads after its library
+  has finished loading.
+{%- endcomment -%}
+<script>
+(function () {
+  var loaded = false;
+  var events = ['scroll', 'mousemove', 'touchstart', 'keydown', 'click'];
+
+  function loadStylesheet(href) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function loadScript(src, onload) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.defer = true;
+    if (onload) s.onload = onload;
+    document.head.appendChild(s);
+  }
+
+  function loadUILibraries() {
+    if (loaded) return;
+    loaded = true;
+
+    loadStylesheet('{{ "swiper-bundle.min.css" | asset_url }}');
+    loadScript('{{ "swiper-bundle.min.js" | asset_url }}', function () {
+      loadScript('{{ "swiper-slider.js" | asset_url }}');
+    });
+
+    loadScript('{{ "gsap.min.js" | asset_url }}', function () {
+      {%- if settings.animations_reveal_on_scroll -%}
+      loadScript('{{ "animations.js" | asset_url }}');
+      {%- endif -%}
+    });
+
+    events.forEach(function (evt) {
+      window.removeEventListener(evt, loadUILibraries, { passive: true });
+    });
+    clearTimeout(fallback);
+  }
+
+  events.forEach(function (evt) {
+    window.addEventListener(evt, loadUILibraries, { passive: true, once: true });
+  });
+
+  var fallback = setTimeout(loadUILibraries, 5000);
+})();
+</script>
