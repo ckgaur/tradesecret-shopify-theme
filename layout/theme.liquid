@@ -46,13 +46,13 @@
 			<script src="{{ 'color-scheme-toggle.js' | asset_url }}" defer="defer"></script>
     {% endif %}
 
-    <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+    {% comment %} <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <link rel="preload" href="{{ 'swiper-bundle.min.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'swiper-slider.js' | asset_url }}" defer="defer"></script>
-    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script> {% endcomment %}
 
     <script>
       // Loads a script once the customer interacts OR the page finishes loading OR a timeout is hit — whichever comes first.
