@@ -2702,8 +2702,6 @@ product-info .loading__spinner:not(.hidden) ~ *,
 
 @media screen and (min-width: 990px) {
   body:has(.section-header .header:not(.drawer-menu)) .utility-bar .page-width {
-    padding-left: 4rem;
-    padding-right: 4rem;
     max-width: 80%;
   }
 
@@ -2846,7 +2844,7 @@ product-info .loading__spinner:not(.hidden) ~ *,
 }
 
 .header {
-  display: grid;
+  display: block;
   grid-template-areas: 'left-icons heading icons';
   grid-template-columns: 1fr 2fr 1fr;
   align-items: center;
@@ -5053,7 +5051,7 @@ shopify-accelerated-checkout-cart {
   width: auto;
   display: inline-block;
   margin: 0 0.25em;
-  min-height: 22px;
+  min-height: 20px;
 }
 
 .announcement-primary-text,
