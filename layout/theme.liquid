@@ -64,6 +64,14 @@
 		<script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
 		{%- endif -%}
 
+		<script src="{{ 'custom-core.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'custom-interactions.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'custom-third-party.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'custom-popup.js' | asset_url }}" defer="defer"></script>
+		{%- if request.path contains '/fr' -%}
+		<script src="{{ 'custom-pages.js' | asset_url }}" defer="defer"></script>
+		{%- endif -%}
+
 <script>
 (function () {
   'use strict';
@@ -602,90 +610,12 @@
 
 <!-- =========================================================
      GOOGLE TAG MANAGER - PERFORMANCE OPTIMIZED
-     Loads after user interaction, browser idle time,
-     or after the page has fully loaded.
+     dataLayer must exist immediately (other scripts push to it
+     before GTM itself loads). The actual GTM loader is deferred
+     and lives in custom-third-party.js (interaction/idle trigger).
 ========================================================= -->
 
-<script>
-(function () {
-  'use strict';
-
-  var GTM_ID = 'GTM-M27MMJCW';
-  var gtmLoaded = false;
-
-  window.dataLayer = window.dataLayer || [];
-
-  function loadGTM() {
-    if (gtmLoaded) return;
-    gtmLoaded = true;
-
-    window.dataLayer.push({
-      'gtm.start': new Date().getTime(),
-      event: 'gtm.js'
-    });
-
-    var firstScript = document.getElementsByTagName('script')[0];
-    var gtmScript = document.createElement('script');
-
-    gtmScript.async = true;
-    gtmScript.src =
-      'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-
-    firstScript.parentNode.insertBefore(gtmScript, firstScript);
-
-    removeListeners();
-  }
-
-  function removeListeners() {
-    window.removeEventListener('scroll', loadGTM, interactionOptions);
-    window.removeEventListener('click', loadGTM, interactionOptions);
-    window.removeEventListener('touchstart', loadGTM, interactionOptions);
-    window.removeEventListener('mousemove', loadGTM, interactionOptions);
-    window.removeEventListener('keydown', loadGTM, interactionOptions);
-  }
-
-  var interactionOptions = {
-    passive: true,
-    once: true
-  };
-
-  /*
-   * Load GTM when the customer actually interacts.
-   * This is the preferred trigger because GTM is then
-   * unlikely to compete with LCP resources.
-   */
-  window.addEventListener('scroll', loadGTM, interactionOptions);
-  window.addEventListener('click', loadGTM, interactionOptions);
-  window.addEventListener('touchstart', loadGTM, interactionOptions);
-  window.addEventListener('mousemove', loadGTM, interactionOptions);
-  window.addEventListener('keydown', loadGTM, interactionOptions);
-
-  /*
-   * Fallback:
-   * If the visitor doesn't interact, load GTM after
-   * the page has finished loading and the browser is idle.
-   */
-  window.addEventListener('load', function () {
-
-    var delayLoad = function () {
-      if ('requestIdleCallback' in window) {
-        requestIdleCallback(loadGTM, {
-          timeout: 3000
-        });
-      } else {
-        setTimeout(loadGTM, 2000);
-      }
-    };
-
-    /*
-     * Give critical page resources some breathing room.
-     */
-    setTimeout(delayLoad, 1500);
-
-  }, { once: true });
-
-})();
-</script>
+<script>window.dataLayer = window.dataLayer || [];</script>
 
 
 <!-- =========================================================
@@ -788,6 +718,11 @@ body .collection .card__wrapper .product-form button {
       window.shopUrl = '{{ request.origin }}';
       window.forms = {
         emailError: '{{ 'newsletter.error_email' | t }}',
+      };
+
+      window.__TS_CUSTOMER__ = {
+        free: {{ customer.tags contains 'FREE' | json }},
+        pro: {{ customer.tags contains 'PRO' | json }}
       };
       window.routes = {
 				root_url: '{{ routes.root_url }}',
