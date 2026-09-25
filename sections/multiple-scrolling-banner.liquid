@@ -1,0 +1,568 @@
+{{ 'section-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'section-multiple-scrolling-banner.css' | asset_url | stylesheet_tag: preload: true }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+		--padding-top: {{ section.settings.padding_top }}px;
+		--padding-bottom: {{ section.settings.padding_bottom }}px;
+		--padding-top-mb: {{ section.settings.padding_top_mb }}px;
+		--padding-bottom-mb: {{ section.settings.padding_bottom_mb }}px;
+
+		--_animation-duration: {{ section.settings.scroll_speed }}s;
+		--_c-column-gap: {{ section.settings.column_gap }}px;
+		--_c-column-gap-mb: {{ section.settings.column_gap_mb }}px;
+  }
+{%- endstyle -%}
+
+{%- liquid
+	assign banner_1_direction = 'left'
+	assign banner_2_direction = 'right'
+
+	if section.settings.scroll_direction == 'reverse'
+		assign banner_1_direction = 'right'
+		assign banner_2_direction = 'left'
+	endif
+
+	assign image_block = section.blocks | where: 'type', 'image' | first
+	assign main_image = image_block.settings.image
+	assign main_image_dark = image_block.settings.image_dark_mode
+	assign main_img_alt = main_image.alt | default: main_image_dark.alt | default: page.title | default: shop.name
+	assign main_img_alt_dark = main_image_dark.alt | default: main_image.alt | default: page.title | default: shop.name
+-%}
+
+<scrolling-banner class="section-responsive-padding multiple-scrolling-banner gradient color-{{ section.settings.color_scheme }}">
+	<div class="multiple-scrolling-banner__scrollers-wrapper">
+		<div class="scroller-wrapper">
+			<div class="scroller" data-speed="fast" data-direction="{{ banner_1_direction }}" data-animated="true">
+				<ul class="scroller__inner list-unstyled">
+					{%- for i in (1..8) -%}
+						<li>
+							{%- for block in section.blocks -%}
+								{% case block.type %}
+
+									{%- when 'icon' -%}
+										{%- style -%}
+											#Icon-{{ block.id }}-{{ section.id }} {
+												--icon-width: {{ block.settings.image_width }}px;
+											}
+										{%- endstyle -%}
+
+										<div id="Icon-{{ block.id }}-{{ section.id }}" class="scroller-item scroller-item--icon icon" {{ block.shopify_attributes }}>
+											{% if block.settings.image != blank %}
+												{%- liquid
+													assign widths = '108'
+													assign icon_alt = block.settings.image.alt | default: block.settings.image_dark_mode.alt | default: page.title | default: shop.name
+													assign icon_alt_dark = block.settings.image_dark_mode.alt | default: block.settings.image.alt | default: page.title | default: shop.name
+												-%}
+												{{
+													block.settings.image
+													| image_url: width: 108
+													| image_tag: loading: 'lazy', sizes: '108', widths: widths, class: 'icon-light-mode', alt: icon_alt
+												}}
+												{% if block.settings.image_dark_mode != blank %}
+													{{
+														block.settings.image_dark_mode
+														| image_url: width: 108
+														| image_tag: loading: 'lazy', sizes: '108', widths: widths, class: 'icon-dark-mode', alt: icon_alt_dark
+													}}
+												{% endif %}
+											{%- else -%}
+												{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+											{%- endif -%}
+										</div>
+				
+									{%- when 'heading' -%}
+										{%- style -%}
+											#Heading-{{ block.id }}-{{ section.id }} {
+												--_s-clr-text: var({{ block.settings.color }})								
+											}
+											{% if block.settings.size == 'custom' %}
+												#Heading-{{ block.id }}-{{ section.id }} {
+													font-size: {{ block.settings.text_custom_font_size_mobile }}px;
+												}
+												@media screen and (min-width: 750px) {
+													#Heading-{{ block.id }}-{{ section.id }} {
+														font-size: {{ block.settings.text_custom_font_size }}px;
+													}
+												}
+												@media screen and (min-width: 750px) {
+													.extra-large-layout #Heading-{{ block.id }}-{{ section.id }} {
+														font-size: calc({{ block.settings.text_custom_font_size }}px * 1.3333);
+													}
+												}
+											{% endif %}
+										{%- endstyle -%}
+									
+										<div id="Heading-{{ block.id }}-{{ section.id }}" class="scroller-item scroller-item--text rte {{ block.settings.text_weight }} {{ block.settings.size }} {{ block.settings.text_font_family }}" {{ block.shopify_attributes }}>
+											<p>
+												{{ block.settings.text }}
+											</p>
+										</div>
+								{%- endcase -%}
+							{%- endfor -%}
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>		
+		</div>
+
+		<div class="scroller-wrapper">
+			<div class="scroller" data-speed="fast" data-direction="{{ banner_2_direction }}" data-animated="true">
+				<ul class="scroller__inner list-unstyled">
+					{%- for i in (1..8) -%}
+						<li>
+							{%- for block in section.blocks -%}
+								{% case block.type %}
+								
+									{%- when 'icon' -%}
+										{%- style -%}
+											#Icon-{{ block.id }}-{{ section.id }} {
+												--icon-width: {{ block.settings.image_width }}px;
+											}
+										{%- endstyle -%}
+
+										<div id="Icon-{{ block.id }}-{{ section.id }}" class="scroller-item scroller-item--icon icon" {{ block.shopify_attributes }}>
+											{% if block.settings.image != blank %}
+												{%- liquid
+													assign widths = '108'
+													assign icon_alt = block.settings.image.alt | default: block.settings.image_dark_mode.alt | default: page.title | default: shop.name
+													assign icon_alt_dark = block.settings.image_dark_mode.alt | default: block.settings.image.alt | default: page.title | default: shop.name
+												-%}
+												{{
+													block.settings.image
+													| image_url: width: 108
+													| image_tag: loading: 'lazy', sizes: '108', widths: widths, class: 'icon-light-mode', alt: icon_alt
+												}}
+												{% if block.settings.image_dark_mode != blank %}
+													{{
+														block.settings.image_dark_mode
+														| image_url: width: 108
+														| image_tag: loading: 'lazy', sizes: '108', widths: widths, class: 'icon-dark-mode', alt: icon_alt_dark
+													}}
+												{% endif %}
+											{%- else -%}
+												{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+											{%- endif -%}
+										</div>
+				
+									{%- when 'heading' -%}
+										{%- style -%}
+											#Heading-{{ block.id }}-{{ section.id }} {
+												--_s-clr-text: var({{ block.settings.color }})								
+											}
+											{% if block.settings.size == 'custom' %}
+												#Heading-{{ block.id }}-{{ section.id }} {
+													font-size: {{ block.settings.text_custom_font_size_mobile }}px;
+												}
+												@media screen and (min-width: 750px) {
+													#Heading-{{ block.id }}-{{ section.id }} {
+														font-size: {{ block.settings.text_custom_font_size }}px;
+													}
+												}
+											{% endif %}
+										{%- endstyle -%}
+
+										<div id="Heading-{{ block.id }}-{{ section.id }}" class="scroller-item scroller-item--text rte {{ block.settings.text_weight }} {{ block.settings.size }} {{ block.settings.text_font_family }}" {{ block.shopify_attributes }}>
+											<p>
+												{{ block.settings.text }}
+											</p>
+										</div>
+								{%- endcase -%}
+							{%- endfor -%}
+						</li>
+					{%- endfor -%}
+				</ul>
+			</div>		
+		</div>	
+	</div>
+
+	{% if image_block %}
+		{%- style -%}
+			@media screen and (min-width: 750px) {
+				.multiple-scrolling-banner__image-wrapper .media {
+					border-radius: {{ image_block.settings.image_border_radius }}px;
+				}
+			}
+		{%- endstyle -%}
+
+		<div class="page-width">
+			<div class="multiple-scrolling-banner__image-wrapper{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}" {{ image_block.shopify_attributes }}>
+				<div class="media media--transparent {% if main_image == blank %} placeholder {% else %} media--{{ image_block.settings.image_ratio }} {% endif %}" {% if image_block.settings.image_ratio == 'adapt' %} style="padding-bottom: {{ 1 | divided_by: main_image.aspect_ratio | times: 100 }}%;" {% endif %}>
+
+					{% if main_image != blank %}
+						{{
+							main_image
+							| image_url: width: 360
+							| image_tag:
+								class: 'multiple-scrolling-banner__image multiple-scrolling-banner__image-light-mode',
+								alt: main_img_alt
+						}}
+						{% if settings.enable_mode == true and main_image_dark != blank %}
+							{{
+								main_image_dark
+								| image_url: width: 360
+								| image_tag:
+									class: 'multiple-scrolling-banner__image multiple-scrolling-banner__image-dark-mode',
+									alt: main_img_alt_dark
+							}}
+						{% endif %}
+					{% else %}
+						{{ 'detailed-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+					{% endif %}
+				</div>
+			</div>	
+		</div>
+	{% endif %}
+</scrolling-banner>
+
+<script src="{{ 'multiple-scrolling-banner.js' | asset_url }}" type="module" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Multiple scrolling banner",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "scroll_speed",
+      "min": 15,
+      "max": 115,
+      "step": 1,
+      "unit": "s",
+      "label": "Scroll speed",
+      "default": 80
+    },
+    {
+      "type": "select",
+      "id": "scroll_direction",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "reverse",
+          "label": "Reverse"
+        }
+      ],
+      "default": "default",
+      "label": "Scroll direction"
+    },
+		{
+      "type": "range",
+      "id": "column_gap",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Mobile layout"
+    },
+		{
+      "type": "range",
+      "id": "column_gap_mb",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Column gap",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 74
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 74
+    },
+		{
+      "type": "range",
+      "id": "padding_top_mb",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top_mb",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mb",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom_mb",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Scrolling text",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Add campaign or promotional text here",
+          "label": "Text"
+        },
+        {
+          "type": "select",
+          "id": "color",
+          "options": [
+            {
+              "value": "--color-foreground",
+              "label": "Text"
+            },
+            {
+              "value": "--color-secondary-foreground",
+              "label": "Text secondary"
+            },
+            {
+              "value": "--color-heading",
+              "label": "Heading"
+            }
+          ],
+          "default": "--color-heading",
+          "label": "Text color"
+        },
+				{
+          "type": "select",
+          "id": "size",
+          "options": [
+            {
+              "value": "h6",
+              "label": "H6"
+            },
+            {
+              "value": "h5",
+              "label": "H5"
+            },
+            {
+              "value": "h4",
+              "label": "H4"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            },
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h1",
+              "label": "H1"
+            },
+						{
+							"value": "h0",
+              "label": "Hero"
+            },
+						{
+							"value": "custom",
+							"label": "Custom"
+						}
+          ],
+          "default": "h0",
+          "label": "Text size"
+        },
+				{
+          "type": "range",
+          "id": "text_custom_font_size",
+          "min": 20,
+          "max": 160,
+          "step": 2,
+          "unit": "px",
+          "default": 120,
+          "label": "Custom text size",
+          "visible_if": "{{ block.settings.size == 'custom' }}"
+        },
+				{
+          "type": "range",
+          "id": "text_custom_font_size_mobile",
+          "min": 16,
+          "max": 120,
+          "step": 2,
+          "unit": "px",
+          "default": 64,
+          "label": "Custom text size mobile",
+          "visible_if": "{{ block.settings.size == 'custom' }}"
+        },
+				{
+					"type": "select",
+					"id": "text_weight",
+					"options": [
+						{
+							"value": "fw-400",
+							"label": "t:settings_schema.global.settings.text_weight.options__1.label"
+						},
+						{
+							"value": "fw-500",
+							"label": "t:settings_schema.global.settings.text_weight.options__2.label"
+						},
+						{
+							"value": "fw-600",
+							"label": "t:settings_schema.global.settings.text_weight.options__3.label"
+						},
+						{
+							"value": "fw-700",
+							"label": "t:settings_schema.global.settings.text_weight.options__4.label"
+						}
+					],
+					"default": "fw-600",
+					"label": "t:settings_schema.global.settings.text_weight.label"
+				},
+        {
+					"type": "select",
+					"id": "text_font_family",
+					"options": [
+						{
+							"value": "font-body",
+							"label": "Body"
+						},
+						{
+							"value": "font-heading",
+							"label": "Heading"
+						}
+					],
+					"default": "font-heading",
+					"label": "Font family"
+				}
+      ]
+    },
+    {
+      "type": "icon",
+      "name": "Icon",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_dark_mode",
+          "label": "Image dark mode",
+					"info": "If image dark mode is not selected, the regular image will be displayed in dark mode.",
+					"visible_if": "{{ settings.enable_mode == true and block.settings.image != blank }}"
+        },
+				{
+					"type": "range",
+					"id": "image_width",
+					"min": 10,
+					"max": 120,
+					"step": 2,
+					"default": 110,
+					"label": "Image width"
+				}
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+				{
+          "type": "image_picker",
+          "id": "image_dark_mode",
+          "label": "Image dark mode",
+					"info": "If image dark mode is not selected, the regular image will be displayed in dark mode.",
+					"visible_if": "{{ settings.enable_mode == true and block.settings.image != blank }}"
+        },
+				{
+					"type": "select",
+					"id": "image_ratio",
+					"options": [
+						{
+							"value": "adapt",
+							"label": "t:sections.multicolumn.settings.image_ratio.options__1.label"
+						},
+						{
+							"value": "portrait",
+							"label": "Portrait"
+						},
+						{
+							"value": "landscape",
+							"label": "Landscape"
+						},
+						{
+							"value": "square",
+							"label": "Square"
+						}
+					],
+					"default": "adapt",
+					"label": "t:sections.multicolumn.settings.image_ratio.label"
+				},
+				{
+					"type": "range",
+					"id": "image_border_radius",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"unit": "px",
+					"label": "Image border radius desktop",
+					"default": 64
+				}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multiple scrolling banner",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+				{
+          "type": "image"
+        },
+				{
+					"type": "icon",
+					"settings": {
+						"image_width": 80
+					}
+				}
+      ]
+    }
+  ]
+}
+{% endschema %}
