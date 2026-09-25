@@ -64,14 +64,6 @@
 		<script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
 		{%- endif -%}
 
-		<script src="{{ 'custom-core.js' | asset_url }}" defer="defer"></script>
-		<script src="{{ 'custom-interactions.js' | asset_url }}" defer="defer"></script>
-		<script src="{{ 'custom-third-party.js' | asset_url }}" defer="defer"></script>
-		<script src="{{ 'custom-popup.js' | asset_url }}" defer="defer"></script>
-		{%- if request.path contains '/fr' -%}
-		<script src="{{ 'custom-pages.js' | asset_url }}" defer="defer"></script>
-		{%- endif -%}
-
 <script>
 (function () {
   'use strict';
@@ -610,12 +602,90 @@
 
 <!-- =========================================================
      GOOGLE TAG MANAGER - PERFORMANCE OPTIMIZED
-     dataLayer must exist immediately (other scripts push to it
-     before GTM itself loads). The actual GTM loader is deferred
-     and lives in custom-third-party.js (interaction/idle trigger).
+     Loads after user interaction, browser idle time,
+     or after the page has fully loaded.
 ========================================================= -->
 
-<script>window.dataLayer = window.dataLayer || [];</script>
+<script>
+(function () {
+  'use strict';
+
+  var GTM_ID = 'GTM-M27MMJCW';
+  var gtmLoaded = false;
+
+  window.dataLayer = window.dataLayer || [];
+
+  function loadGTM() {
+    if (gtmLoaded) return;
+    gtmLoaded = true;
+
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      event: 'gtm.js'
+    });
+
+    var firstScript = document.getElementsByTagName('script')[0];
+    var gtmScript = document.createElement('script');
+
+    gtmScript.async = true;
+    gtmScript.src =
+      'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
+
+    firstScript.parentNode.insertBefore(gtmScript, firstScript);
+
+    removeListeners();
+  }
+
+  function removeListeners() {
+    window.removeEventListener('scroll', loadGTM, interactionOptions);
+    window.removeEventListener('click', loadGTM, interactionOptions);
+    window.removeEventListener('touchstart', loadGTM, interactionOptions);
+    window.removeEventListener('mousemove', loadGTM, interactionOptions);
+    window.removeEventListener('keydown', loadGTM, interactionOptions);
+  }
+
+  var interactionOptions = {
+    passive: true,
+    once: true
+  };
+
+  /*
+   * Load GTM when the customer actually interacts.
+   * This is the preferred trigger because GTM is then
+   * unlikely to compete with LCP resources.
+   */
+  window.addEventListener('scroll', loadGTM, interactionOptions);
+  window.addEventListener('click', loadGTM, interactionOptions);
+  window.addEventListener('touchstart', loadGTM, interactionOptions);
+  window.addEventListener('mousemove', loadGTM, interactionOptions);
+  window.addEventListener('keydown', loadGTM, interactionOptions);
+
+  /*
+   * Fallback:
+   * If the visitor doesn't interact, load GTM after
+   * the page has finished loading and the browser is idle.
+   */
+  window.addEventListener('load', function () {
+
+    var delayLoad = function () {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGTM, {
+          timeout: 3000
+        });
+      } else {
+        setTimeout(loadGTM, 2000);
+      }
+    };
+
+    /*
+     * Give critical page resources some breathing room.
+     */
+    setTimeout(delayLoad, 1500);
+
+  }, { once: true });
+
+})();
+</script>
 
 
 <!-- =========================================================
@@ -719,11 +789,6 @@ body .collection .card__wrapper .product-form button {
       window.forms = {
         emailError: '{{ 'newsletter.error_email' | t }}',
       };
-
-      window.__TS_CUSTOMER__ = {
-        free: {{ customer.tags contains 'FREE' | json }},
-        pro: {{ customer.tags contains 'PRO' | json }}
-      };
       window.routes = {
 				root_url: '{{ routes.root_url }}',
         cart_add_url: '{{ routes.cart_add_url }}',
@@ -780,8 +845,414 @@ body .collection .card__wrapper .product-form button {
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
-		{%- if settings.cart_type == 'drawer' -%}
+		{% comment %} {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
-    {%- endif -%}
+    {%- endif -%} {% endcomment %}
+
+<script>
+  (function e() {
+    var today = new Date();
+    var stamp = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours();
+    var e = document.createElement('script');
+    e.type = 'text/javascript';
+    e.async = true;
+    e.defer = true;
+    e.src = 'https://butterly.com/richmedia/socialfeed/socialEmbed.js?stamp=' + stamp;
+    var t = document.getElementsByTagName('script')[0];
+    t.parentNode.insertBefore(e, t);
+  })();
+</script>
+
+
+<script>
+	document.querySelectorAll('details.mega-menu > summary').forEach(summary => {
+  summary.addEventListener('click', function(e) {
+    const details = this.parentElement;
+    const url = this.getAttribute('data-url');
+
+    if (!details.hasAttribute('data-opened')) {
+      // First click → open dropdown only
+      e.preventDefault();
+      details.setAttribute('open', 'true');
+      details.setAttribute('data-opened', 'true');
+    } else {
+      // Second click (menu already open) → go to URL
+      window.location.href = url;
+    }
+  });
+});
+
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("footer a").forEach(function(link) {
+    if (link.textContent.trim() === "About Us") {
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener");
+    }
+  });
+});
+</script>
+<style>
+  @media (min-width: 1200px) {
+    .header.js-initializing {
+      visibility: hidden;
+    }
+  }
+</style>
+
+<script>
+{% comment %} document.addEventListener("DOMContentLoaded", function() {
+  // Run only if screen is >= 1200px
+  if (!window.matchMedia("(min-width: 1200px)").matches) return;
+
+  const header = document.querySelector(".header");
+  if (!header) return;
+
+  // Temporarily hide header to prevent layout shift
+  header.classList.add("js-initializing");
+
+  // Create wrapper
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("header__content");
+
+  const menu = header.querySelector(".header__inline-menu");
+  const children = Array.from(header.children);
+
+  children.forEach(child => {
+    if (child !== menu) {
+      wrapper.appendChild(child);
+    }
+  });
+
+  header.insertBefore(wrapper, menu);
+
+  // Apply styles
+  const style = document.createElement("style");
+  style.innerHTML = `
+    @media (min-width: 1200px) {
+      .header__content {
+        max-width: 85%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .header__inline-menu {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Reveal header once done
+  header.classList.remove("js-initializing");
+});
+</script> {% endcomment %}
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Check if site is on French version (/fr path)
+  if (window.location.pathname.startsWith("/fr")) {
+    const bookingBtnText = document.querySelector(".salon-booking-button .text");
+    if (bookingBtnText && bookingBtnText.textContent.trim() === "Book a Salon Service") {
+      bookingBtnText.textContent = "Réserver un service de salon";
+    }
+    
+    // Also update the button's title attribute if needed
+    const bookingBtn = document.querySelector(".salon-booking-button");
+    if (bookingBtn) {
+      bookingBtn.setAttribute("title", "Réserver un service de salon");
+    }
+  }
+});
+</script>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const sortContainer = document.querySelector('#SortBy');
+  if (!sortContainer) return;
+
+  // Listen for change on any radio input inside #SortBy
+  sortContainer.addEventListener('change', function (event) {
+    const target = event.target;
+    if (target.name === 'sort_by' && target.checked) {
+      const selectedValue = target.value;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set('sort_by', selectedValue);
+
+      // Optional: Add a loader class
+      document.body.classList.add('loading');
+
+      // Redirect to the URL with new sort_by param
+      window.location.href = url.toString();
+    }
+  });
+
+  // On page load: set checked radio based on URL param
+  const urlParams = new URLSearchParams(window.location.search);
+  const sortByParam = urlParams.get('sort_by');
+
+  if (sortByParam) {
+    const radioToCheck = sortContainer.querySelector(`input[name="sort_by"][value="${sortByParam}"]`);
+    if (radioToCheck) {
+      radioToCheck.checked = true;
+    }
+  }
+
+  // Re-initialize infinite scroll if it's defined
+  if (typeof resetInfiniteScroll === "function") {
+    resetInfiniteScroll();
+  }
+});
+
+</script>
+
+{% if customer %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // check if discount was already applied this session
+      if (!sessionStorage.getItem("discountApplied")) {
+        {% if customer.tags contains "FREE" %}
+          if (!window.location.href.includes("discount=FREE CUSTOMERS")) {
+            sessionStorage.setItem("discountApplied", "true");
+            window.location.href = "/discount/FREE CUSTOMERS";
+          }
+        {% elsif customer.tags contains "PRO" %}
+          if (!window.location.href.includes("discount=PRO CUSTOMERS")) {
+            sessionStorage.setItem("discountApplied", "true");
+            window.location.href = "/discount/PRO CUSTOMERS";
+          }
+        {% endif %}
+      }
+    });
+  </script>
+{% endif %}
+
+
+<!--
+  US VISITOR REDIRECT POPUP — Trade Secrets (tradesecrets.ca)
+  ---------------------------------------------------------------
+  Detects visitors browsing from outside Canada (using Shopify's native,
+  free geolocation endpoint) and invites them to shop GlamourSecrets.com
+  instead, since Trade Secrets only ships within Canada.
+-->
+<div id="us-redirect-popup" style="display:none;">
+  <div id="us-redirect-overlay"></div>
+  <div id="us-redirect-modal" role="dialog" aria-modal="true" aria-labelledby="us-redirect-title">
+    <button type="button" id="us-redirect-close" aria-label="Close">&times;</button>
+
+    <div class="us-redirect-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+        <path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z"/>
+        <circle cx="12" cy="9.5" r="2.5"/>
+      </svg>
+    </div>
+
+    <p id="us-redirect-title">Looks like you're visiting from the United States</p>
+    <p id="us-redirect-subtext">
+      Trade Secrets ships within Canada only. Shop on our U.S store
+      <strong>GlamourSecrets.com</strong> for US shipping and full checkout.
+    </p>
+
+    <div id="us-redirect-actions">
+      <a id="us-redirect-continue" href="https://glamoursecrets.com">
+        Continue to U.S Shop
+      </a>
+      <button type="button" id="us-redirect-stay">
+        Stay on TradeSecrets.ca
+      </button>
+    </div>
+  </div>
+</div>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  #us-redirect-popup, #us-redirect-popup * {
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    text-shadow: none !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    float: none !important;
+  }
+  #us-redirect-overlay {
+    position: fixed !important; inset: 0 !important;
+    background: rgba(0,0,0,0.5) !important; z-index: 9998 !important;
+  }
+  #us-redirect-modal {
+    position: fixed !important;
+    top: 50% !important; left: 50% !important;
+    transform: translate(-50%,-50%) !important;
+    background: #ffffff !important;
+    width: 90% !important; max-width: 400px !important;
+    padding: 32px 28px 28px !important;
+    border-radius: 4px !important;
+    z-index: 9999 !important;
+    text-align: center !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
+    font-family: 'Poppins', sans-serif !important;
+    display: block !important;
+  }
+  #us-redirect-close {
+    position: absolute !important;
+    top: 12px !important; right: 14px !important;
+    width: 28px !important; height: 28px !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    background: none !important;
+    font-size: 22px !important; line-height: 1 !important;
+    color: #888 !important; cursor: pointer !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-close:hover { color: #171717 !important; }
+  #us-redirect-popup .us-redirect-icon {
+    width: 44px !important; height: 44px !important;
+    border-radius: 50% !important; background: #f2f2f2 !important;
+    color: #171717 !important;
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    margin: 0 auto 14px auto !important;
+  }
+  #us-redirect-title {
+    display: block !important;
+    font-size: 16px !important; font-weight: 600 !important;
+    margin: 0 0 8px !important; color: #171717 !important;
+    line-height: 1.4 !important;
+  }
+  #us-redirect-subtext {
+    display: block !important;
+    font-size: 13.5px !important; font-weight: 400 !important;
+    color: #555 !important; margin: 0 0 22px !important; line-height: 1.5 !important;
+  }
+  #us-redirect-subtext strong { color: #171717 !important; font-weight: 600 !important; }
+  #us-redirect-actions {
+    display: flex !important; flex-direction: column !important; gap: 10px !important;
+    width: 100% !important;
+  }
+  #us-redirect-continue {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    width: 100% !important; height: 44px !important;
+    background: #c8102e !important; color: #ffffff !important;
+    text-decoration: none !important;
+    border-radius: 4px !important;
+    font-size: 14px !important; font-weight: 500 !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-continue:hover { background: #a80d26 !important; }
+  #us-redirect-stay {
+    display: flex !important; align-items: center !important; justify-content: center !important;
+    width: 100% !important; height: 44px !important;
+    background: transparent !important;
+    border: 1px solid #171717 !important;
+    border-radius: 4px !important;
+    font-size: 14px !important; font-weight: 500 !important;
+    color: #171717 !important; cursor: pointer !important;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  #us-redirect-stay:hover { background: #f2f2f2 !important; }
+  @media (max-width: 480px) {
+    #us-redirect-modal { padding: 28px 20px 22px !important; }
+  }
+</style>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'ts_geo_popup_dismissed';
+  var DISMISS_DAYS = 30;
+
+  function isDismissed() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      var expires = parseInt(raw, 10);
+      return Date.now() < expires;
+    } catch (e) { return false; }
+  }
+
+  function setDismissed() {
+    try {
+      var expires = Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000;
+      localStorage.setItem(STORAGE_KEY, String(expires));
+    } catch (e) {}
+  }
+
+  function showPopup() {
+    var el = document.getElementById('us-redirect-popup');
+    if (!el) return;
+    el.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePopup() {
+    var el = document.getElementById('us-redirect-popup');
+    if (!el) return;
+    el.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function init() {
+    if (isDismissed()) return;
+
+    fetch('/browsing_context_suggestions.json', { credentials: 'same-origin' })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) {
+        console.log('[US redirect popup] geolocation response:', data);
+
+        if (!data || !data.detected_values) {
+          console.log('[US redirect popup] no detected_values in response — popup will not show');
+          return;
+        }
+
+        var dv = data.detected_values;
+        var code = (dv.country && (dv.country.handle || dv.country.iso_code)) ||
+                    dv.country_code || null;
+        var name = (dv.country && dv.country.name) || dv.country_name || null;
+
+        var isCanada = code === 'CA' || name === 'Canada';
+        var detectedSomething = !!(code || name);
+
+        console.log('[US redirect popup] detected country code:', code, '| name:', name, '| will show popup:', (detectedSomething && !isCanada));
+
+        if (detectedSomething && !isCanada) {
+          showPopup();
+        }
+      })
+      .catch(function (err) {
+        console.log('[US redirect popup] geolocation fetch failed:', err);
+        // Fail silently — if geolocation lookup fails, no popup is shown
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('us-redirect-close').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-stay').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-overlay').addEventListener('click', function () {
+      setDismissed();
+      hidePopup();
+    });
+    document.getElementById('us-redirect-continue').addEventListener('click', function () {
+      setDismissed();
+    });
+
+    init();
+  });
+})();
+</script>	
+
   </body>
 </html>

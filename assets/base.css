@@ -4525,9 +4525,11 @@ details[open] > .header__submenu {
 }
 
 .header__menu-item {
-  font-size: 1.6rem;
-  text-decoration: none;
-  color: rgba(var(--color-foreground), 1);
+  --inline-padding: 1.7rem;
+    font-size: 1.6rem;
+    padding: 0.4rem var(--inline-padding);
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 1);
 }
 
 body:has(.customer) .header__icon--account {
@@ -7580,4 +7582,31 @@ display:block !important;
 
 }
 
+@media only screen and (min-width: 1024px){
+.desk-hidden {
+    display: none !important;
+}
 
+}
+@media only screen and (max-width: 1023px){
+.header-content{
+  display: none !important;
+}
+}
+
+span.st-label.st-js-label {
+    display: none;
+}
+
+.st-wishlist-details-button[data-type=floating] {
+    max-width: 50px!important;
+    border-radius: 50% !important;
+}
+.aco-box {
+    position: absolute !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    top: unset !important;
+    left: unset !important;
+    z-index: 9999;
+}

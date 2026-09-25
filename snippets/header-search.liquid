@@ -16,7 +16,7 @@
 	endif
 %}
 
-<details-modal class="header__search">
+<details-modal class="header__search {{ class_id }}">
   {% if search_type == "inline" or search_type == "inline_filter" %}
 
     <div class="search-collections gradient" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}">

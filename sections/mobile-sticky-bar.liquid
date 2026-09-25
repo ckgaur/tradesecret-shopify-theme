@@ -4,9 +4,7 @@
   {% style %}
 		#shopify-section-{{ section.id }} {
 			--counter-foreground: {{ section.settings.counter_color }};
-			--counter-foreground-dark-mode: {{ section.settings.counter_color_dark_mode }};
 			--counter-bg: {{ section.settings.counter_bg }};
-			--counter-bg-dark-mode: {{ section.settings.counter_bg_dark_mode }};
 		}
 
     @media screen and (max-width:749px) {
@@ -23,6 +21,23 @@
         }
       {% endif %}
     }
+
+    @media screen and (max-width:749px) {
+
+  #shopify-section-{{ section.id }} {
+    position: fixed;
+    top: 0;
+    bottom: auto !important;
+    left: 0;
+    width: 100%;
+    z-index: 1; /* MÁS BAJO que el header */
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+  }
+
+}
+
+    
   {% endstyle %}
 
   <div class="color-{{ section.settings.color_scheme }}">
@@ -91,9 +106,7 @@
 										</svg>
 
 										<span class="header__icon-text cart-count">
-											<span aria-hidden="true" id="cart-count-bubble-sticky" class="cart-count-bubble cart-count-bubble-sticky">
-                        {{- cart.item_count -}}
-                      </span>
+											<span aria-hidden="true" id="cart-count-bubble-sticky" class="cart-count-bubble cart-count-bubble-sticky"> {{ cart.item_count }} </span>
 										</span>
 									</button>
 								{% else %}
@@ -108,9 +121,7 @@
 										</svg>
 
 										<span class="header__icon-text  cart-count">
-											<span aria-hidden="true" id="cart-count-bubble-sticky" class="cart-count-bubble cart-count-bubble-sticky">
-                        {{- cart.item_count -}}
-                      </span>
+											<span aria-hidden="true" id="cart-count-bubble-sticky" class="cart-count-bubble cart-count-bubble-sticky"> {{ cart.item_count }} </span>
 										</span>
 									</a>
 								{% endif %}
@@ -273,6 +284,42 @@
     </div>
   </div>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const stickyBar = document.getElementById("shopify-section-{{ section.id }}");
+
+  const header = document.querySelector('#shopify-section-header');
+  const announcement = document.querySelector('.announcement-bar');
+
+  function checkHeaderVisibility() {
+
+    let triggerPoint = 0;
+
+    if (header) {
+      triggerPoint += header.offsetHeight;
+    }
+
+    if (announcement) {
+      triggerPoint += announcement.offsetHeight;
+    }
+
+    if (window.scrollY > triggerPoint) {
+      stickyBar.style.transform = "translateY(0)";
+    } else {
+      stickyBar.style.transform = "translateY(-100%)";
+    }
+  }
+
+  window.addEventListener("scroll", checkHeaderVisibility);
+  checkHeaderVisibility();
+
+});
+</script>
+
+
+
   <script src="{{ 'mobile-sticky-bar.js' | asset_url }}" defer="defer"></script>
 {% endif %}
 
@@ -310,20 +357,6 @@
       "id": "counter_bg",
       "label": "Counter background",
       "default": "#171717"
-    },
-    {
-      "type": "color",
-      "id": "counter_color_dark_mode",
-      "label": "Counter color dark mode",
-      "default": "#171717",
-			"visible_if": "{{ settings.enable_mode == true }}"
-    },
-		{
-      "type": "color",
-      "id": "counter_bg_dark_mode",
-      "label": "Counter background dark mode",
-      "default": "#ffffff",
-			"visible_if": "{{ settings.enable_mode == true }}"
     },
     {
       "type": "paragraph",
