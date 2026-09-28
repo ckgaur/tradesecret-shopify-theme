@@ -1,5 +1,0 @@
-{%- if badge_handleize == 'pre-order' or badge_handleize == 'preorder' -%}
-  {{- 'products.product.pre_order' | t -}}
-{%- else -%}
-  {{- badge | strip | escape -}}
-{%- endif -%}
