@@ -1,0 +1,47 @@
+<div class="spacer-block" style="--spacer-size: {{ block.settings.pixel_size | times: 0.1 }}rem; --spacer-size-mobile: {{ block.settings.pixel_size_mobile | times: 0.1 }}rem;" {{ block.shopify_attributes }} data-testid="spacer-block"> </div>
+
+{% stylesheet %}
+  .spacer-block {
+    height: var(--spacer-size);
+  }
+  @media screen and (max-width: 749px) {
+    .spacer-block {
+      height: var(--spacer-size-mobile, var(--spacer-size));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spacer",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "pixel_size",
+      "label": "Size",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "pixel_size_mobile",
+      "label": "Mobile size",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer",
+      "category": "Layout"
+    }
+  ]
+}
+{% endschema %}

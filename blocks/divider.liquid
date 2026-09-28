@@ -1,0 +1,96 @@
+<div class="divider-block" style="--spt: {{ block.settings.padding_top | times: 0.1 }}rem; --spb: {{ block.settings.padding_bottom | times: 0.1 }}rem; --spt-mobile: {{ block.settings.padding_top_mobile | times: 0.1 }}rem; --spb-mobile: {{ block.settings.padding_bottom_mobile | times: 0.1 }}rem;" {{ block.shopify_attributes }}>
+  <div class="divider-line" style="border-bottom: {{ block.settings.thickness }}px solid rgb(var(--color-foreground)); opacity: {{ block.settings.opacity }}%;"> </div>
+</div>
+
+{% stylesheet %}
+  .divider-block {
+    padding-top: var(--spt-mobile);
+    padding-bottom: var(--spb-mobile);
+  }
+
+  @media screen and (min-width: 750px) {
+    .divider-block {
+      padding-top: var(--spt);
+      padding-bottom: var(--spb);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Divider",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "thickness",
+      "label": "Thickness",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.block_padding.padding"
+    },
+    {
+      "type": "range",  
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "label": "t:blocks.block_padding.padding_top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "label": "t:blocks.block_padding.padding_bottom"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "label": "t:blocks.block_padding.padding_top_mobile"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 10,
+      "label": "t:blocks.block_padding.padding_bottom_mobile"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Divider",
+      "category": "Layout"
+    }
+  ]
+}
+{% endschema %}

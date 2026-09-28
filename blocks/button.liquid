@@ -1,0 +1,116 @@
+<a {% if block.settings.button_link == blank %} role="link" aria-disabled="true" {% else %} href="{{ block.settings.button_link }}"{% endif %}
+class="button-block button button--{{ block.settings.button_style }} button--{{ block.settings.button_outline }} button--animate-{{ settings.animations_hover_elements }}{% if block.settings.custom_alignment == true %} button-alignment--{{ block.settings.alignment }} button-alignment-mobile--{{ block.settings.alignment_mobile }}{% endif %}" {{ block.shopify_attributes }}>
+  <span>
+    {{- block.settings.button_label | escape -}}
+  </span>
+</a>
+
+{% schema %}
+{
+  "name": "Button",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Button label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "label": "Button style"
+    },
+    {
+      "type": "select",
+      "id": "button_outline",
+      "options": [
+        {
+          "value": "outline-none",
+          "label": "None"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "outline-hover",
+          "label": "Outline on hover"
+        }
+      ],
+      "default": "outline-hover",
+      "label": "Button outline"
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_alignment",
+      "default": false,
+      "label": "Custom alignment"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Alignment",
+      "visible_if": "{{ block.settings.custom_alignment == true }}"
+    },
+    {
+      "type": "select",
+      "id": "alignment_mobile",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "label": "Alignment mobile",
+      "visible_if": "{{ block.settings.custom_alignment == true }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button",
+      "category": "Basic"
+    }
+  ]
+}
+{% endschema %}

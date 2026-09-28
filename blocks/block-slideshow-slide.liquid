@@ -1,0 +1,228 @@
+{%- liquid
+  assign has_block_padding = false
+  if block.settings.padding_block_start != 0 or block.settings.padding_block_end != 0 or block.settings.padding_inline_start != 0 or block.settings.padding_inline_end != 0
+    assign has_block_padding = true
+  endif
+  if block.settings.padding_block_start_mobile != 0 or block.settings.padding_block_end_mobile != 0 or block.settings.padding_inline_start_mobile != 0 or block.settings.padding_inline_end_mobile != 0
+    assign has_block_padding = true
+  endif
+-%}
+
+<div class="block-slideshow-slide{% if block.settings.style == 'card' %} card-style--{{ block.settings.style }} color-{{ block.settings.color_scheme }}{% endif %}{% if has_block_padding %} block-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="{% if has_block_padding %}{% render 'block-padding', settings: block.settings %}{% endif %}{% if block.settings.style == 'card' %} --card-border-radius: {{ block.settings.card_border_radius }}px;{% endif %}" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+  {
+    "name": "Slide",
+    "class": "swiper-slide",
+    "settings": [
+      {
+        "type": "select",
+        "id": "style",
+        "options": [
+          {
+            "value": "standard",
+            "label": "Standard"
+          },
+          {
+            "value": "card",
+            "label": "Card"
+          }
+        ],
+        "default": "standard",
+        "label": "Style"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "scheme-2",
+        "visible_if": "{{ block.settings.style == 'card' }}"
+      },
+      {
+        "type": "range",
+        "id": "card_border_radius",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Card border radius",
+        "default": 0,
+        "visible_if": "{{ block.settings.style == 'card' }}"
+      },
+      {
+        "type": "header",
+        "content": "t:blocks.block_padding.padding"
+      },
+      {
+        "type": "range",
+        "id": "padding_block_start",
+        "label": "t:blocks.block_padding.padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_block_end",
+        "label": "t:blocks.block_padding.padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_inline_start",
+        "label": "t:blocks.block_padding.padding_left",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_inline_end",
+        "label": "t:blocks.block_padding.padding_right",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_block_start_mobile",
+        "label": "t:blocks.block_padding.padding_top_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_block_end_mobile",
+        "label": "t:blocks.block_padding.padding_bottom_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_inline_start_mobile",
+        "label": "t:blocks.block_padding.padding_left_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_inline_end_mobile",
+        "label": "t:blocks.block_padding.padding_right_mobile",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image"
+      },
+      { 
+        "type": "richtext"
+      },
+      {
+        "type": "button"
+      },
+      { 
+        "type": "spacer" 
+      },
+      {
+        "type": "divider"
+      },
+      {
+        "type": "@app"
+      }
+    ],
+    "presets": [
+      { 
+        "name": "Slide",
+        "category": "Layout",
+        "blocks": {
+          "image": {
+            "type": "image",
+            "name": "Image",
+            "settings": {
+              "link": "",
+              "image_ratio": "adapt",
+              "image_width": "pixels",
+              "custom_image_width_pixels": 45,
+              "custom_alignment": false
+            }
+          },
+          "spacer_1": {
+            "type": "spacer",
+            "name": "Spacer",
+            "settings": {
+              "pixel_size": 20,
+              "pixel_size_mobile": 20
+            }
+          },
+          "heading": {
+            "type": "richtext",
+            "settings": {
+              "text": "<h3>Card heading</h3>",
+              "type_preset": "h6",
+              "font_family": "default",
+              "color": "default",
+              "padding_block_start": 0,
+              "padding_block_end": 0,
+              "padding_inline_start": 0,
+              "padding_inline_end": 0
+            }
+          },
+          "spacer_2": {
+            "type": "spacer",
+            "name": "Spacer",
+            "settings": {
+              "pixel_size": 12,
+              "pixel_size_mobile": 8
+            }
+          },
+          "text": {
+            "type": "richtext",
+            "settings": {
+              "text": "<p>Pair text with an image to give customers a better idea of what your product is.</p>",
+              "type_preset": "rte",
+              "font_family": "default",
+              "color": "default",
+              "padding_block_start": 0,
+              "padding_block_end": 0,
+              "padding_inline_start": 0,
+              "padding_inline_end": 0
+            }
+          }
+        },
+        "block_order": [
+          "image",
+          "spacer_1",
+          "heading",
+          "spacer_2",
+          "text"
+        ]
+      }
+    ]
+  }
+{% endschema %}

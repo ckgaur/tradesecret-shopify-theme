@@ -1,0 +1,111 @@
+<div class="buy-buttons-wrapper {% if class != blank %} {{ class }} {% endif %}">
+
+  {%- if product != blank -%}
+    {%- liquid
+      assign gift_card_recipient_feature_active = false
+      if block.settings.show_gift_card_recipient and product.gift_card?
+        assign gift_card_recipient_feature_active = true
+      endif
+
+      assign show_dynamic_checkout = false
+      if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+        assign show_dynamic_checkout = true
+      endif
+
+      assign has_preorder_tag = false
+      for tag in product.tags
+        assign tag_h = tag | handleize
+        if tag_h == 'pre-order' or tag_h == 'preorder'
+          assign has_preorder_tag = true
+          break
+        endif
+      endfor
+
+      assign quick_add_id = 'QuickAdd-' | append: product_form_id
+      assign qty_rules = false
+      if product.selected_or_first_available_variant.quantity_rule.min > 1 or product.selected_or_first_available_variant.quantity_rule.max != null or product.selected_or_first_available_variant.quantity_rule.increment > 1
+        assign qty_rules = true
+      endif
+    -%}
+
+    {%- if product.variants.size > 1 or qty_rules -%}
+      <modal-opener data-modal="#{{ quick_add_id }}" class="product-form">
+        <div class="product-form__buttons">
+          <button id="{{ product_form_id }}-submit" type="button" name="add" class="product-form__submit button button--full-width button--{{ card_button_style }} button--{{ card_button_outline }} button--animate-{{ settings.animations_hover_elements }}" aria-haspopup="dialog" data-product-url="{{ product.url }}" data-initial-product-id="{{ product.id }}" data-product-id="{{ product.selected_or_first_available_variant.id }}" {% if product.selected_or_first_available_variant.available == false %} disabled {% endif %}>
+            <span>{{ 'products.product.choose_options' | t }}</span>
+            {%- render 'loading-spinner' -%}
+          </button>
+        </div>
+      </modal-opener>
+      <quick-add-modal id="{{ quick_add_id }}" class="quick-add-modal">
+        <popup-overlay class="popup-overlay"></popup-overlay>
+        <div role="dialog" aria-label="{{ 'products.product.choose_product_options' | t: product_name: product.title | escape }}" aria-modal="true" class="quick-add-modal__content global-settings-popup" tabindex="-1">
+          <button class="drawer__close button--animate-{{ settings.animations_hover_elements }}" type="button" id="ModalClose-{{ quick_add_id }}" aria-label="{{ 'accessibility.close' | t }}">
+            {% render 'icon-close' %}
+          </button>
+          <div id="QuickAddInfo-{{ quick_add_id }}" class="quick-add-modal__content-info"></div>
+        </div>
+      </quick-add-modal>
+    {%- else -%}
+      <product-form class="product-form" data-hide-errors="{{ gift_card_recipient_feature_active }}" data-section-id="{{ section.id }}" {% if has_preorder_tag %}data-preorder="true"{% endif %}>
+        <div class="product-form__error-message-wrapper" role="alert" hidden>
+          <svg aria-hidden="true" focusable="false" class="icon icon-error" viewBox="0 0 13 13">
+            <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"/>
+            <circle cx="6.5" cy="6.5" r="5.5" fill="#EB001B" stroke="#EB001B" stroke-width="0.7"/>
+            <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"/>
+            <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="#EB001B" stroke-width="0.7">
+          </svg>
+          <span class="product-form__error-message"></span>
+        </div>
+
+        {%- liquid
+          assign quantity_rule_soldout = false
+          assign check_against_inventory = true
+          if product.selected_or_first_available_variant.inventory_management != 'shopify' or product.selected_or_first_available_variant.inventory_policy == 'continue'
+            assign check_against_inventory = false
+          endif
+          if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
+            assign quantity_rule_soldout = true
+          endif
+        -%}
+        {%- form 'product',
+          product,
+          id: product_form_id,
+          class: 'form',
+          novalidate: 'novalidate',
+          data-type: 'add-to-cart-form'
+        -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %} disabled {% endif %} class="product-variant-id">
+
+          {%- if gift_card_recipient_feature_active -%}
+            {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
+          {%- endif -%}
+          
+          <div class="product-form__buttons">
+            <button id="ProductSubmitButton-{{ section_id }}" type="submit" name="add" class="product-form__submit button button--full-width {% if show_dynamic_checkout %}  button--{{ card_button_style }} button--{{ card_button_outline }} {% else %}button--{{ card_button_style }} button--{{ card_button_outline }}{% endif %} button--animate-{{ settings.animations_hover_elements }}" {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout %} disabled {% endif %}>
+              <span>
+                {% render 'product-add-to-cart-button-label',
+                  product: product,
+                  variant: product.selected_or_first_available_variant,
+                  quantity_rule_soldout: quantity_rule_soldout
+                %}
+              </span>						
+              {%- render 'loading-spinner' -%}
+            </button>
+          </div>
+        {%- endform -%}
+
+      </product-form>
+    {%- endif -%}
+
+  {%- else -%}
+
+    <div class="product-form">
+      <div class="product-form__buttons form {% if buy_it_now_button_capitalize != blank %}{{ buy_it_now_button_capitalize }}{% endif %}">
+        <button type="submit" name="add" class="product-form__submit button button--full-width button--{{ card_button_style }} button--{{ card_button_outline }}" disabled>
+          {{ 'products.product.sold_out' | t }}
+        </button>
+      </div>
+    </div>
+  {%- endif -%}
+</div>

@@ -1,0 +1,38 @@
+{%- liquid
+  assign compare_media_image = null
+  if product.featured_media != blank
+    if product.featured_media.media_type == 'image'
+      assign compare_media_image = product.featured_media
+    elsif product.featured_media.preview_image != blank
+      assign compare_media_image = product.featured_media.preview_image
+    endif
+  endif
+-%}
+<div class="compare-banner__product-item" data-product-id="{{ product.id }}">
+  {% if compare_media_image != blank %}
+    <div class="compare-media">
+      <img
+        src="{{ compare_media_image | image_url: width: 110 }}"
+        alt="{{ compare_media_image.alt | default: product.title | escape }}"
+        width="{{ compare_media_image.width }}"
+        height="{{ compare_media_image.height }}"
+        loading="lazy"
+      >
+    </div>
+  {% endif %}
+
+  <div class="compare-information">
+    <h3 class="compare-title">
+      {{- product.title -}}
+    </h3>
+    <p class="compare-price">
+      {{- product.price | money -}}
+    </p>
+  </div>
+
+  <span class="remove-compare-product button--animate-{{ settings.animations_hover_elements }}" data-product-id="{{ product.id }}">
+		<span class="remove-compare-product__icon">
+			{% render 'icon-close' %}
+		</span>
+  </span>
+</div>
